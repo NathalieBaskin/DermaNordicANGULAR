@@ -1,0 +1,30 @@
+<header class="header">
+  <div class="logo-container">
+    <a routerLink="/">
+      <img [src]="logoPath" alt="Logo" class="logo" />
+    </a>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-right">
+      <form (ngSubmit)="handleSearch($event)">
+        <input
+          type="text"
+          placeholder="Sök..."
+          class="search-bar"
+          [(ngModel)]="searchQuery"
+          name="search"
+        />
+        <button type="submit" class="search-button">
+          <i class="fa-solid fa-search"></i>
+        </button>
+      </form>
+    </div>
+
+    <ul class="nav-links">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      <li><a routerLink="/treatments" routerLinkActive="active">Treatments</a></li>
+      <li><a routerLink="/prices" routerLinkActive="active">Prices</a></li>
+    </ul>
+  </nav>
+</header>
