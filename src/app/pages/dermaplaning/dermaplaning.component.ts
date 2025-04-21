@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-dermaplaning',
@@ -8,7 +10,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dermaplaning.component.html',
   styleUrls: ['./dermaplaning.component.css']
 })
-export class DermaplaningComponent implements OnInit {
+export class DermaplaningComponent {
+  constructor(private router: Router) {}
   treatmentName: string = 'Dermaplaning';
   treatmentImage: string = '/assets/images/dermaplaning.png';
   treatmentDescription: string = 'Dermaplaning is a non-invasive exfoliation treatment that removes dead skin cells and fine facial hair (peach fuzz) using a sterile surgical scalpel. This procedure helps to create a smoother, brighter complexion and allows skincare products to penetrate more effectively.';
@@ -27,11 +30,17 @@ export class DermaplaningComponent implements OnInit {
   ];
   treatmentPrice: string = '$800 MXN';
 
-  constructor() {}
+
+
 
   ngOnInit() {}
 
   bookTreatment() {
-    console.log('Booking treatment:', this.treatmentName);
+    this.router.navigate(['/booking'], {
+      queryParams: {
+        treatment: this.treatmentName,
+        price: this.treatmentPrice
+      }
+    });
   }
 }
