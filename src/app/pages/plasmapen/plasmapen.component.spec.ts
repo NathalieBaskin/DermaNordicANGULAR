@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlasmapenComponent } from './plasmapen.component';
+import {PlasmapenComponent } from './plasmapen.component';
 
 describe('PlasmapenComponent', () => {
   let component: PlasmapenComponent;

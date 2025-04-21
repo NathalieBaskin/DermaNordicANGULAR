@@ -1,1 +1,28 @@
-<p>microneedling works!</p>
+<div class="treatment-page">
+  <div class="hero" [style.background-image]="'url(' + treatmentImage + ')'">
+    <h1>{{ treatmentName }}</h1>
+  </div>
+
+  <div class="treatment-content">
+    <h2>What is {{ treatmentName }}?</h2>
+    <p>{{ treatmentDescription }}</p>
+
+    <h3>Benefits of {{ treatmentName }}</h3>
+    <ul>
+      <li *ngFor="let benefit of treatmentBenefits">{{ benefit }}</li>
+    </ul>
+
+    <h3>Procedure</h3>
+    <p>{{ treatmentProcedure }}</p>
+
+    <h3>Aftercare</h3>
+    <ul>
+      <li *ngFor="let care of treatmentAftercare">{{ care }}</li>
+    </ul>
+
+    <h3>Price</h3>
+    <p>{{ treatmentPrice }}</p>
+
+    <button (click)="bookTreatment()">Book</button>
+  </div>
+</div>

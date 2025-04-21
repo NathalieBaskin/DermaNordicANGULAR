@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MicroneedlingComponent } from './microneedling.component';
 
 describe('MicroneedlingComponent', () => {
-  let component: MicroneedlingComponent;
+  let component:MicroneedlingComponent;
   let fixture: ComponentFixture<MicroneedlingComponent>;
 
   beforeEach(async () => {

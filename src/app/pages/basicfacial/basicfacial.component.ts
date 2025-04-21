@@ -2,30 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-dermaplaning',
+  selector: 'app-basicfacial',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './basicfacial.component.html',
   styleUrls: ['./basicfacial.component.css']
 })
-export class Basicfacialomponent implements OnInit {
-  treatmentName: string = 'Dermaplaning';
-  treatmentImage: string = '/assets/images/dermaplaning.png';
-  treatmentDescription: string = 'Dermaplaning is a non-invasive exfoliation treatment that removes dead skin cells and fine facial hair (peach fuzz) using a sterile surgical scalpel. This procedure helps to create a smoother, brighter complexion and allows skincare products to penetrate more effectively.';
+export class BasicfacialComponent implements OnInit {
+  treatmentName: string = 'BasicFacial';
+  treatmentImage: string = '/assets/images/facial.jpg';
+  treatmentDescription: string = 'A basic facial is a deep cleansing treatment designed to remove dirt, oil, and dead skin cells from the skin. It includes gentle exfoliation, steaming, and a hydrating mask to leave the skin feeling refreshed and revitalized.';
   treatmentBenefits: string[] = [
-    'Removes dead skin cells for a fresh, glowing complexion',
-    'Eliminates fine facial hair for smoother skin',
-    'Enhances the absorption of skincare products',
-    'Provides a flawless base for makeup application',
-    'Safe for most skin types, with no downtime'
+    'Removes dirt, oil, and dead skin cells',
+    'Hydrates and nourishes the skin',
+    'Helps unclog pores and prevent breakouts',
+    'Improves circulation for a healthy glow',
+    'Relaxing and stress-reducing experience'
   ];
-  treatmentProcedure: string = 'The treatment takes approximately 30–45 minutes. A skincare professional will gently glide a sterile scalpel across the skin at a 45-degree angle, removing dead skin and peach fuzz. The procedure is painless and requires no recovery time.';
+  treatmentProcedure: string = 'The facial begins with a gentle cleansing to remove impurities, Exfoliation helps to slough off dead skin cells, followed by steaming to open up pores. A hydrating mask is applied to restore moisture and nourish the skin. The treatment finishes with a soothing moisturizer and sunscreen application.'
   treatmentAftercare: string[] = [
-    'Apply sunscreen daily, as your skin will be more sensitive to UV rays',
-    'Avoid harsh exfoliants for at least 48 hours',
-    'Keep skin moisturized to maintain hydration'
+    'Avoid heavy makeup for at least 24 hours',
+    'Drink plenty of water to keep the skin hydrated',
+    'Apply sunscreen to protect the skin from UV damage',
+    'Use gentle skincare products to maintain the facial benefits'
   ];
-  treatmentPrice: string = '$800 MXN';
+  treatmentPrice: string = '$600 MXN';
 
   constructor() {}
 
