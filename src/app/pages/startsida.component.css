@@ -1,8 +1,6 @@
 
   .hero {
     background-image: url('/assets/images/hero-background.jpg');
-  /* Resten av CSS-koden förblir oförändrad */
-
   background-size: cover;
   background-position: center;
   color: white;
@@ -38,6 +36,8 @@
   margin: 10px;
   width: 200px;
   text-align: center;
+  text-decoration: none;
+  color: black;
 }
 
 .treatment-card h2 {

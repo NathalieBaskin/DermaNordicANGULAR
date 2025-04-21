@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./basicfacial.component.css']
 })
 export class BasicfacialComponent implements OnInit {
-  treatmentName: string = 'BasicFacial';
+  treatmentName: string = 'Basic Facial';
   treatmentImage: string = '/assets/images/facial.jpg';
   treatmentDescription: string = 'A basic facial is a deep cleansing treatment designed to remove dirt, oil, and dead skin cells from the skin. It includes gentle exfoliation, steaming, and a hydrating mask to leave the skin feeling refreshed and revitalized.';
   treatmentBenefits: string[] = [

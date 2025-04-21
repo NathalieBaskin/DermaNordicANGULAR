@@ -17,10 +17,11 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  text-align: center;
 }
 
 button {
-  background-color: #007bff;
+  background-color: #000000;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -30,5 +31,17 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #023011;
+}
+.benefits p, .aftercare p {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.benefits p::before, .aftercare p::before {
+  content: "";
+  position: absolute;
+  left: 0;
+
 }

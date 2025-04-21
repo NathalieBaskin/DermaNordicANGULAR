@@ -7,18 +7,19 @@
     <h2>What is {{ treatmentName }}?</h2>
     <p>{{ treatmentDescription }}</p>
 
+
     <h3>Benefits of {{ treatmentName }}</h3>
-    <ul>
-      <li *ngFor="let benefit of treatmentBenefits">{{ benefit }}</li>
-    </ul>
+    <div class="benefits">
+      <p *ngFor="let benefit of treatmentBenefits">{{ benefit }}</p>
+    </div>
 
     <h3>Procedure</h3>
     <p>{{ treatmentProcedure }}</p>
 
     <h3>Aftercare</h3>
-    <ul>
-      <li *ngFor="let care of treatmentAftercare">{{ care }}</li>
-    </ul>
+    <div class="aftercare">
+      <p *ngFor="let care of treatmentAftercare">{{ care }}</p>
+    </div>
 
     <h3>Price</h3>
     <p>{{ treatmentPrice }}</p>
