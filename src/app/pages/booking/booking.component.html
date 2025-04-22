@@ -13,13 +13,13 @@
 
   <div class="calendar-container">
     <mat-calendar
-      [(selected)]="selectedDate"
-      (selectedChange)="onDateSelect($event)"
-      [dateFilter]="dateFilter"
-      [dateClass]="dateClass"
-    >
-    </mat-calendar>
-  </div>
+    [(selected)]="selectedDate"
+    (selectedChange)="onDateSelect($event)"
+    [dateClass]="dateClass"
+    [dateFilter]="dateFilter"
+  >
+  </mat-calendar>
+    </div>
 
   <div class="form-group">
     <label for="selectedDate">Selected Date:</label>

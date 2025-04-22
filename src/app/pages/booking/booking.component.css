@@ -69,57 +69,39 @@ button[type="submit"]:hover:not([disabled]) {
 }
 
 button[type="submit"]:disabled {
-  background-color: #cccccc;
+  background-color: #ff0000;
   cursor: not-allowed;
 }
-.fully-booked {
-  background-color: red !important;
-  border-radius: 100%;
-}
 
-.custom-tooltip {
+.mat-calendar-body-cell.fully-booked-date {
   position: relative;
-}
-
-.custom-tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: black;
-  color: white;
-  padding: 5px;
-  border-radius: 3px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.custom-tooltip:hover::after {
-  opacity: 1;
-}
-.fully-booked-date {
-  background-color: red !important;
+  background-color: red !important; /* Se till att !important används för att överstyra andra stilar */
   border-radius: 100%;
-  color: white;
+  pointer-events: none; /* Gör datumet oklickbart */
 }
 
-.fully-booked-date::after {
-  content: 'Fully booked';
+.mat-calendar-body-cell.fully-booked-date .mat-calendar-body-cell-content {
+  color: white; /* Ändra textfärgen för bättre kontrast */
+}
+
+.mat-calendar-body-cell.fully-booked-date::after {
+  content: 'Fully Booked!';
   position: absolute;
-  bottom: 100%;
+  top: -30px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 5px;
   border-radius: 3px;
   font-size: 12px;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
-.fully-booked-date:hover::after {
+.mat-calendar-body-cell.fully-booked-date:hover::after {
   opacity: 1;
 }
 @media (max-width: 600px) {

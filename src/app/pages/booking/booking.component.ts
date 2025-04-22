@@ -59,10 +59,8 @@ export class BookingComponent implements OnInit {
 
     this.bookingService.getFullyBookedDates().subscribe(
       dates => {
-        this.fullyBookedDates = dates.map(dateString => {
-          const date = new Date(dateString);
-          return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-        });
+        this.fullyBookedDates = dates.map(dateString => new Date(dateString));
+        console.log('Fully booked dates:', this.fullyBookedDates);
         this.changeDetectorRef.detectChanges();
       },
       error => console.error('Error fetching fully booked dates:', error)
@@ -73,16 +71,22 @@ export class BookingComponent implements OnInit {
     if (!date) return false;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return date >= today && !this.isDateFullyBooked(date);
+    return date >= today;
   }
 
   onDateSelect(event: Date | null) {
-    if (event && !this.isDateFullyBooked(event)) {
-      this.selectedDate = new Date(event.getTime() - event.getTimezoneOffset() * 60000);
-      this.selectedDateString = this.selectedDate.toISOString().split('T')[0];
-      this.selectedTherapist = '';
-      this.selectedTime = '';
-      this.availableTimes = [];
+    if (event) {
+      if (this.isDateFullyBooked(event)) {
+        alert('This date is fully booked!'); // Visa ett meddelande till användaren
+        this.selectedDate = null;
+        this.selectedDateString = '';
+      } else {
+        this.selectedDate = new Date(event.getTime() - event.getTimezoneOffset() * 60000);
+        this.selectedDateString = this.selectedDate.toISOString().split('T')[0];
+        this.selectedTherapist = '';
+        this.selectedTime = '';
+        this.availableTimes = [];
+      }
     } else {
       this.selectedDate = null;
       this.selectedDateString = '';
@@ -154,10 +158,6 @@ export class BookingComponent implements OnInit {
     }
     return '';
   }
-  addTooltip = (date: Date): string => {
-    return this.isDateFullyBooked(date) ? 'Fully booked' : '';
-  }
-
   isDateFullyBooked(date: Date): boolean {
     const adjustedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
     return this.fullyBookedDates.some(bookedDate => {
