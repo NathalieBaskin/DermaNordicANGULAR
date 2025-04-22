@@ -1,70 +1,56 @@
-<h2>Book Your Treatment</h2>
-
-<form (ngSubmit)="onSubmit()">
-  <div class="form-group">
-    <label for="treatment">Treatment:</label>
-    <input type="text" id="treatment" [(ngModel)]="treatmentName" name="treatment" readonly>
-  </div>
-
-  <div class="form-group">
-    <label for="price">Price:</label>
-    <input type="text" id="price" [(ngModel)]="treatmentPrice" name="price" readonly>
-  </div>
-
-  <div class="calendar-container">
-    <mat-calendar
-      [(selected)]="selectedDate"
-      (selectedChange)="onDateSelect($event)"
-      [dateClass]="dateClass"
-      [dateFilter]="dateFilter"
-      matTooltip="Röda datum är fullbokade">
-    </mat-calendar>
-  </div>
-
-  <div *ngIf="showBookedMessage" class="booked-message">
-    Fully Booked!
-  </div>
-
-  <div class="form-group">
-    <label for="selectedDate">Selected Date:</label>
-    <input type="text" id="selectedDate" [value]="selectedDateString" readonly>
-  </div>
-
-  <div class="form-group" *ngIf="selectedDate">
-    <label for="therapist">Therapist:</label>
-    <select id="therapist" [(ngModel)]="selectedTherapist" name="therapist" (change)="onTherapistSelect()">
-      <option value="">Select a therapist</option>
-      <option *ngFor="let therapist of therapists" [value]="therapist">{{therapist}}</option>
-    </select>
-  </div>
-
-  <div class="form-group" *ngIf="selectedDate && selectedTherapist">
-    <label for="time">Time:</label>
-    <select id="time" [(ngModel)]="selectedTime" name="time">
-      <option value="">Select a time</option>
-      <option *ngFor="let timeSlot of availableTimes"
-              [value]="timeSlot.time"
-              [disabled]="timeSlot.isBooked"
-              [style.text-decoration]="timeSlot.isBooked ? 'line-through' : 'none'">
-        {{timeSlot.time}} {{timeSlot.isBooked ? '(Booked)' : ''}}
-      </option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" [(ngModel)]="firstName" name="firstName" required>
-  </div>
-
-  <div class="form-group">
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" [(ngModel)]="lastName" name="lastName" required>
-  </div>
-
-  <div class="form-group">
-    <label for="email">Email:</label>
-    <input type="email" id="email" [(ngModel)]="email" name="email" required>
-  </div>
-
-  <button type="submit" [disabled]="!isFormValid()">Book Now</button>
-</form>
+<div class="container">
+  <h2>Book Treatment</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="treatment">Treatment:</label>
+      <input type="text" id="treatment" [value]="treatmentName" readonly>
+    </div>
+    <div class="form-group">
+      <label for="price">Price:</label>
+      <input type="text" id="price" [value]="treatmentPrice" readonly>
+    </div>
+    <div class="form-group">
+      <label for="date">Date:</label>
+      <div class="calendar-container">
+        <mat-calendar
+          [(selected)]="selectedDate"
+          (selectedChange)="onDateSelect($event)"
+          [dateClass]="dateClass"
+          [dateFilter]="dateFilter">
+        </mat-calendar>
+      </div>
+      <div *ngIf="showBookedMessage" class="booked-message">
+        The chosen date is fully booked. Please select another date.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="therapist">Therapist:</label>
+      <select id="therapist" [(ngModel)]="selectedTherapist" name="therapist" (change)="onTherapistSelect()">
+        <option value="">Select a therapist</option>
+        <option *ngFor="let therapist of therapists" [value]="therapist">{{ therapist }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="time">Time:</label>
+      <select id="time" [(ngModel)]="selectedTime" name="time">
+        <option value="">Select a time</option>
+        <option *ngFor="let timeSlot of availableTimes" [value]="timeSlot.time" [disabled]="timeSlot.isBooked">
+          {{ timeSlot.time }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" [(ngModel)]="firstName" name="firstName">
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" [(ngModel)]="lastName" name="lastName">
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="email" name="email">
+    </div>
+    <button type="submit" [disabled]="!isFormValid()">Book</button>
+  </form>
+</div>

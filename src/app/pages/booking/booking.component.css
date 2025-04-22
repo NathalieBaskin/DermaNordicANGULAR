@@ -105,27 +105,28 @@ button[type="submit"]:disabled {
   z-index: 2;
 }
 
-
-
 /* Tooltip styling med en enda ::after */
 ::ng-deep .mat-calendar-body-cell.fully-booked-date::after {
-  content: var(--tooltip-text);
+  content: 'Fully booked!';
   position: absolute;
   top: -30px;
-  left: 50%;
+  left: 20%;
   transform: translateX(-50%);
-  background-color: rgba(255, 0, 0, 0.9);
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 5px 8px;
   border-radius: 4px;
   font-size: 12px;
   white-space: nowrap;
   z-index: 1000;
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 /* Visa tooltip vid hover */
-::ng-deep .mat-calendar-body-cell.fully-booked-date:hover::after {
+::ng-deep .mat-calendar-body-cell.fully-booked-date:hover::after,
+::ng-deep .mat-calendar-body-cell.fully-booked-date:focus::after {
   opacity: 1;
   visibility: visible;
 }
