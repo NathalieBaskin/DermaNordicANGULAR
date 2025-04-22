@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-basicfacial',
@@ -9,6 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./basicfacial.component.css']
 })
 export class BasicfacialComponent implements OnInit {
+  constructor(private router: Router) {}
   treatmentName: string = 'Basic Facial';
   treatmentImage: string = '/assets/images/facial.jpg';
   treatmentDescription: string = 'A basic facial is a deep cleansing treatment designed to remove dirt, oil, and dead skin cells from the skin. It includes gentle exfoliation, steaming, and a hydrating mask to leave the skin feeling refreshed and revitalized.';
@@ -28,11 +30,14 @@ export class BasicfacialComponent implements OnInit {
   ];
   treatmentPrice: string = '$600 MXN';
 
-  constructor() {}
-
   ngOnInit() {}
 
   bookTreatment() {
-    console.log('Booking treatment:', this.treatmentName);
+    this.router.navigate(['/booking'], {
+      queryParams: {
+        treatment: this.treatmentName,
+        price: this.treatmentPrice
+      }
+    });
   }
 }

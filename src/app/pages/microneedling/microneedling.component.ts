@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-microneedling',
@@ -9,6 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./microneedling.component.css']
 })
 export class MicroneedlingComponent implements OnInit {
+  constructor(private router: Router) {}
   treatmentName: string = 'Microneedling';
   treatmentImage: string = '/assets/images/microneedling.webp';
   treatmentDescription: string = 'Microneedling is a minimally invasive skin treatment that uses tiny needles to create micro-injuries in the skin, stimulating collagen production and improving skin texture.';
@@ -29,11 +31,14 @@ export class MicroneedlingComponent implements OnInit {
   ];
   treatmentPrice: string = '$1200 MXN';
 
-  constructor() {}
-
   ngOnInit() {}
 
   bookTreatment() {
-    console.log('Booking treatment:', this.treatmentName);
+    this.router.navigate(['/booking'], {
+      queryParams: {
+        treatment: this.treatmentName,
+        price: this.treatmentPrice
+      }
+    });
   }
 }
