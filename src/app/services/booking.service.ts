@@ -6,15 +6,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BookingService {
-  private apiUrl = 'http://localhost:3000/api'; // Uppdatera detta till din faktiska API-URL
+  private apiUrl = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getAvailableTimes(date: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/available-times`, { params: { date } });
+  getAvailableTimes(date: string, therapist: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/available-times`, { params: { date, therapist } });
   }
 
   saveBooking(booking: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/bookings`, booking);
+  }
+
+  getFullyBookedDates(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/fully-booked-dates`);
   }
 }

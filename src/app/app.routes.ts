@@ -5,6 +5,7 @@ import { BasicfacialComponent} from './pages/basicfacial/basicfacial.component';
 import { MicroneedlingComponent } from './pages/microneedling/microneedling.component';
 import { PlasmapenComponent } from './pages/plasmapen/plasmapen.component';
 import { BookingComponent } from './pages/booking/booking.component';
+import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 export const routes: Routes = [
   { path: '', component: StartsidaComponent },
@@ -13,4 +14,5 @@ export const routes: Routes = [
   { path: 'microneedling', component: MicroneedlingComponent},
   { path: 'plasmapen', component: PlasmapenComponent},
   { path: 'booking', component: BookingComponent},
+  { path: 'confirmation', component: ConfirmationComponent },
 ];
