@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { BookingService } from '../../services/booking.service';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BookingService } from '../../services/booking.service';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 
 interface TimeSlot {
@@ -30,6 +30,7 @@ interface TimeSlot {
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.css']
 })
+
 export class BookingComponent implements OnInit {
   treatmentName: string = '';
   treatmentPrice: string = '';
@@ -45,17 +46,32 @@ export class BookingComponent implements OnInit {
   fullyBookedDates: Date[] = [];
   showBookedMessage: boolean = false;
   calendarReady: boolean = false;
+  isConsultation: boolean = false;
+  consultationTimes: string[] = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00'];
+  consultationInfo: string = `A consultation is an important first step before any treatment. It allows us to assess your skin,
+    discuss your concerns and goals, and recommend the most suitable treatments for you.
+    During the consultation, we will:
+    - Evaluate your skin type and condition
+    - Discuss your skincare routine and lifestyle
+    - Address any specific concerns you may have
+    - Recommend appropriate treatments and products
+    - Answer any questions you might have about our services
+    This consultation is free of charge and carries no obligation. It's an opportunity for you to
+    learn more about our treatments and for us to provide personalized recommendations.`;
+    showBookingConfirmation: boolean = false;
 
-
-  constructor(
+   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private bookingService: BookingService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.treatmentName = params['treatment'] || '';
-      this.treatmentPrice = params['price'] || '';
+      this.isConsultation = params['consultation'] === 'true';
+      this.treatmentName = this.isConsultation ? 'Consultation' : (params['treatment'] || '');
+      this.treatmentPrice = this.isConsultation ? 'Free' : (params['price'] || '');
     });
 
     this.bookingService.getFullyBookedDates().subscribe(
@@ -65,10 +81,7 @@ export class BookingComponent implements OnInit {
           return new Date(year, month - 1, day);
         });
 
-        // Flagga som gör att kalendern renderas först efter att datumen laddats
         this.calendarReady = true;
-
-        // Säkerställ att vyer uppdateras
         this.changeDetectorRef.detectChanges();
       },
       error => console.error('Fel vid hämtning av fullbokade datum:', error)
@@ -86,17 +99,11 @@ export class BookingComponent implements OnInit {
     if (event) {
       if (this.isDateFullyBooked(event)) {
         console.log('Försöker välja fullbokat datum:', event);
-
-        // Visa meddelandet
         this.showBookedMessage = true;
-
-        // Dölj meddelandet efter 3 sekunder
         setTimeout(() => {
           this.showBookedMessage = false;
           this.changeDetectorRef.detectChanges();
         }, 3000);
-
-        // Återställ valet
         this.selectedDate = null;
         this.selectedDateString = '';
       } else {
@@ -116,6 +123,7 @@ export class BookingComponent implements OnInit {
       this.availableTimes = [];
     }
   }
+
   onTherapistSelect() {
     if (this.selectedDate && this.selectedTherapist) {
       this.getAvailableTimes();
@@ -146,12 +154,22 @@ export class BookingComponent implements OnInit {
       therapist: this.selectedTherapist,
       firstName: this.firstName,
       lastName: this.lastName,
-      email: this.email
+      email: this.email,
+      isConsultation: this.isConsultation
     };
     this.bookingService.saveBooking(bookingData).subscribe(
       response => {
         console.log('Booking saved successfully:', response);
-        // Här kan du lägga till logik för att navigera till en bekräftelsesida
+        if (this.isConsultation) {
+          this.showBookingConfirmation = true;
+          this.changeDetectorRef.detectChanges(); // Tvinga uppdatering av vyn
+          setTimeout(() => {
+            this.showBookingConfirmation = false;
+            this.router.navigate(['/']);
+          }, 2000);
+        } else {
+          // Hantera vanliga behandlingsbokningar här om det behövs
+        }
       },
       error => {
         console.error('Error saving booking:', error);
@@ -170,9 +188,7 @@ export class BookingComponent implements OnInit {
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     if (view === 'month') {
-      // Kontrollera om datumet är fullbokat
       const isBooked = this.isDateFullyBooked(cellDate);
-
       if (isBooked) {
         console.log(`Datum ${cellDate.toISOString().split('T')[0]} markeras som fullbokat`);
         return 'fully-booked-date';
@@ -180,16 +196,14 @@ export class BookingComponent implements OnInit {
     }
     return '';
   }
+
   isDateFullyBooked(date: Date): boolean {
     if (!date || !this.fullyBookedDates || this.fullyBookedDates.length === 0) {
       return false;
     }
-
-    // Förenkla jämförelsen genom att bara jämföra år, månad och dag
     const year = date.getFullYear();
     const month = date.getMonth();
     const day = date.getDate();
-
     return this.fullyBookedDates.some(bookedDate => {
       return (
         bookedDate.getFullYear() === year &&

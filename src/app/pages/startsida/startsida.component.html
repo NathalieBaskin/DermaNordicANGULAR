@@ -2,7 +2,7 @@
   <section class="hero">
     <h1>Welcome to Derma Nordic Med Spa!</h1>
     <p>Professional treatments for healthy and beautiful skin.</p>
-    <button>Book Consultation</button>
+    <button [routerLink]="['/booking']" [queryParams]="{consultation: true}">Book Consultation</button>
   </section>
 
   <section class="treatments">
@@ -14,11 +14,10 @@
       <h2>Basic Facial</h2>
       <p>A basic facial is a deep cleansing treatment that helps keep the skin healthy.</p>
     </a>
-
     <a class="treatment-card" [routerLink]="['/microneedling']">
       <h2>Microneedling</h2>
       <p>Microneedling stimulates collagen production and improves skin texture, reducing scars and wrinkles.</p>
- </a>
+    </a>
     <a class="treatment-card" [routerLink]="['/plasmapen']">
       <h2>Plasma Pen</h2>
       <p>Plasma pen treatment helps tighten the skin and reduce wrinkles without surgery.</p>

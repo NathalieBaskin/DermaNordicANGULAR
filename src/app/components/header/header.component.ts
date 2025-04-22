@@ -14,14 +14,30 @@ export class HeaderComponent {
   logoPath: string = '/assets/images/logo.JPG';
   searchQuery: string = '';
 
+  treatments = [
+    { name: 'Basic Facial', route: '/basicfacial' },
+    { name: 'Microneedling', route: '/microneedling' },
+    { name: 'Plasmapen', route: '/plasmapen' },
+    { name: 'Dermaplaning', route: '/dermaplaning' }
+  ];
+
   constructor(private router: Router) {}
 
   handleSearch(event: Event): void {
     event.preventDefault();
-    const query = this.searchQuery.trim();
+    const query = this.searchQuery.trim().toLowerCase();
 
     if (query !== '') {
-      this.router.navigate(['/sok'], { queryParams: { q: query } });
+      const matchedTreatment = this.treatments.find(treatment =>
+        treatment.name.toLowerCase().includes(query)
+      );
+
+      if (matchedTreatment) {
+        this.router.navigate([matchedTreatment.route]);
+      } else {
+        this.router.navigate(['/sok'], { queryParams: { q: query } });
+      }
+
       this.searchQuery = '';
     }
   }

@@ -7,20 +7,18 @@
 
   <nav class="nav">
     <div class="nav-right">
-      <form (ngSubmit)="handleSearch($event)">
+      <form (ngSubmit)="handleSearch($event)" class="search-form">
         <input
           type="text"
-          placeholder="Sök..."
-          class="search-bar"
           [(ngModel)]="searchQuery"
-          name="search"
-        />
+          name="searchQuery"
+          placeholder="Search for treatments..."
+          class="search-input"
+          (keyup.enter)="handleSearch($event)"
+        >
       </form>
     </div>
 
-    <ul class="nav-links">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-      <li><a routerLink="/booking" routerLinkActive="active">Booking</a></li>
-    </ul>
+
   </nav>
 </header>

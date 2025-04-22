@@ -1,8 +1,13 @@
 <div class="container">
-  <h2>Book Treatment</h2>
+  <h2>{{ isConsultation ? 'Book Consultation' : 'Book Treatment' }}</h2>
+
+  <div *ngIf="isConsultation" class="consultation-info">
+    <p>{{ consultationInfo }}</p>
+  </div>
+
   <form (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="treatment">Treatment:</label>
+      <label for="treatment">{{ isConsultation ? 'Consultation' : 'Treatment' }}:</label>
       <input type="text" id="treatment" [value]="treatmentName" readonly>
     </div>
     <div class="form-group">
@@ -49,6 +54,11 @@
       <label for="email">Email:</label>
       <input type="email" id="email" [(ngModel)]="email" name="email">
     </div>
-    <button type="submit" [disabled]="!isFormValid()">Book</button>
+    <button type="submit" [disabled]="!isFormValid()">
+      {{ isConsultation ? 'Book Consultation' : 'Book Treatment' }}
+    </button>
   </form>
+</div>
+<div *ngIf="showBookingConfirmation" class="booking-confirmation">
+  <p>Booked!</p>
 </div>
