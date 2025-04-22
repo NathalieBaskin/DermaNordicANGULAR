@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { StartsidaComponent } from './pages/startsida.component';
+import { StartsidaComponent } from './pages/startsida/startsida.component';
 import { DermaplaningComponent } from './pages/dermaplaning/dermaplaning.component';
 import { BasicfacialComponent} from './pages/basicfacial/basicfacial.component';
 import { MicroneedlingComponent } from './pages/microneedling/microneedling.component';
