@@ -75,10 +75,11 @@ button[type="submit"]:disabled {
   cursor: not-allowed;
 }
 
-/* HELT NY METOD FÖR FULLBOKADE DATUM */
+/* FÖRBÄTTRAD METOD FÖR FULLBOKADE DATUM */
 ::ng-deep .mat-calendar-body-cell.fully-booked-date {
   position: relative;
-  pointer-events: none !important;
+  pointer-events: auto !important;
+  cursor: not-allowed !important;
 }
 
 /* Använd ::before för att skapa en perfekt röd cirkel */
@@ -104,9 +105,11 @@ button[type="submit"]:disabled {
   z-index: 2;
 }
 
-/* Tooltip för fullbokade datum */
-::ng-deep .mat-calendar-body-cell.fully-booked-date:hover::after {
-  content: 'Fullbokat!';
+
+
+/* Tooltip styling med en enda ::after */
+::ng-deep .mat-calendar-body-cell.fully-booked-date::after {
+  content: var(--tooltip-text);
   position: absolute;
   top: -30px;
   left: 50%;
@@ -118,18 +121,23 @@ button[type="submit"]:disabled {
   font-size: 12px;
   white-space: nowrap;
   z-index: 1000;
+  pointer-events: none;
+}
+
+/* Visa tooltip vid hover */
+::ng-deep .mat-calendar-body-cell.fully-booked-date:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Stil för meddelandet som visas när man klickar på ett fullbokat datum */
 .booked-message {
-  background-color: #ff0000;
-  color: white;
-  padding: 10px 15px;
+  color: rgb(0, 0, 0);
   border-radius: 4px;
-  margin-top: 10px;
   text-align: center;
   font-weight: bold;
   animation: fadeIn 0.3s forwards;
+  margin-bottom: 50px;
 }
 
 @keyframes fadeIn {
