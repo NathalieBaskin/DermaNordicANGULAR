@@ -44,43 +44,37 @@ export class BookingComponent implements OnInit {
   availableTimes: TimeSlot[] = [];
   fullyBookedDates: Date[] = [];
   showBookedMessage: boolean = false;
+  calendarReady: boolean = false;
+
 
   constructor(
     private route: ActivatedRoute,
     private bookingService: BookingService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
-
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.treatmentName = params['treatment'] || '';
       this.treatmentPrice = params['price'] || '';
     });
 
-    // Hämta fullbokade datum från API
     this.bookingService.getFullyBookedDates().subscribe(
       dates => {
-        // Konvertera strängar till Date-objekt
         this.fullyBookedDates = dates.map(dateString => {
-          // Skapa ett nytt Date-objekt med korrekt tidszon
-          // Använd YYYY-MM-DD formatet för att undvika tidszonsförskjutningar
           const [year, month, day] = dateString.split('-').map(Number);
-          const date = new Date(year, month - 1, day); // Månader är 0-indexerade i JavaScript
-          console.log(`Konverterar datum: ${dateString} -> ${date.toISOString()}`);
-          return date;
+          return new Date(year, month - 1, day);
         });
 
-        console.log('Fullbokade datum efter konvertering:', this.fullyBookedDates);
+        // Flagga som gör att kalendern renderas först efter att datumen laddats
+        this.calendarReady = true;
 
-        // Tvinga uppdatering av kalendern
-        setTimeout(() => {
-          this.changeDetectorRef.markForCheck();
-          this.changeDetectorRef.detectChanges();
-        }, 100);
+        // Säkerställ att vyer uppdateras
+        this.changeDetectorRef.detectChanges();
       },
       error => console.error('Fel vid hämtning av fullbokade datum:', error)
     );
   }
+
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
     const today = new Date();
