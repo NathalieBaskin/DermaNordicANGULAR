@@ -8,17 +8,19 @@ import { Observable } from 'rxjs';
 export class BookingService {
   private apiUrl = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getAvailableTimes(date: string, therapist: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/available-times`, { params: { date, therapist } });
+  saveBooking(bookingData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/bookings`, bookingData);
   }
-
-  saveBooking(booking: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/bookings`, booking);
-  }
-
   getFullyBookedDates(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/fully-booked-dates`);
+  }
+
+  getAvailableTimes(date: Date, therapist: string): Observable<string[]> {
+    const formattedDate = date.toISOString().split('T')[0];
+    return this.http.get<string[]>(`${this.apiUrl}/available-times`, {
+      params: { date: formattedDate, therapist }
+    });
   }
 }

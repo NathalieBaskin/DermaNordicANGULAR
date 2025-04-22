@@ -15,4 +15,5 @@ db.serialize(() => {
   )`);
 });
 
-db.close();
+// Exportera databaseanslutningen istället för att stänga den
+module.exports = db;

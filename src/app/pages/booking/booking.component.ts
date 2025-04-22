@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { BookingService } from '../../services/booking.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BookingService } from '../../services/booking.service';
 
 interface TimeSlot {
   time: string;
@@ -23,8 +22,7 @@ interface TimeSlot {
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    MatInputModule,
-    MatTooltipModule
+    MatInputModule
   ],
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.css']
@@ -46,7 +44,6 @@ export class BookingComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private bookingService: BookingService
   ) {}
 
@@ -56,103 +53,101 @@ export class BookingComponent implements OnInit {
       this.treatmentPrice = params['price'] || '';
     });
     this.getFullyBookedDates();
-    console.log('Component initialized');
   }
 
   getFullyBookedDates() {
-    this.bookingService.getFullyBookedDates().subscribe({
-      next: (dates: string[]) => {
+    this.bookingService.getFullyBookedDates().subscribe(
+      dates => {
         this.fullyBookedDates = dates.map(date => new Date(date));
       },
-      error: (error) => console.error('Error fetching fully booked dates:', error)
-    });
-  }
-
-  dateFilter = (date: Date | null): boolean => {
-    if (!date) return false;
-    return !this.fullyBookedDates.some(bookedDate =>
-      bookedDate.getDate() === date.getDate() &&
-      bookedDate.getMonth() === date.getMonth() &&
-      bookedDate.getFullYear() === date.getFullYear()
+      error => {
+        console.error('Error fetching fully booked dates:', error);
+      }
     );
-  }
-
-  dateClass = (date: Date): string => {
-    if (this.fullyBookedDates.some(bookedDate =>
-      bookedDate.getDate() === date.getDate() &&
-      bookedDate.getMonth() === date.getMonth() &&
-      bookedDate.getFullYear() === date.getFullYear()
-    )) {
-      return 'fully-booked';
-    }
-    return '';
   }
 
   onDateSelect(event: Date | null) {
     if (event) {
       this.selectedDate = event;
-      this.selectedDateString = this.selectedDate.toISOString().split('T')[0];
+      this.selectedDateString = event.toISOString().split('T')[0];
       this.selectedTherapist = '';
       this.selectedTime = '';
       this.availableTimes = [];
-      console.log('Date selected:', this.selectedDateString);
+    } else {
+      this.selectedDate = null;
+      this.selectedDateString = '';
+      this.selectedTherapist = '';
+      this.selectedTime = '';
+      this.availableTimes = [];
     }
   }
 
   onTherapistSelect() {
-    console.log('Therapist selected:', this.selectedTherapist);
-    this.selectedTime = '';
-    this.getAvailableTimes();
+    if (this.selectedDate && this.selectedTherapist) {
+      this.getAvailableTimes();
+    }
   }
 
   getAvailableTimes() {
     if (this.selectedDate && this.selectedTherapist) {
-      console.log('Fetching available times for:', this.selectedDateString, this.selectedTherapist);
-      this.bookingService.getAvailableTimes(this.selectedDateString, this.selectedTherapist).subscribe({
-        next: (response: any) => {
-          console.log('Response from server:', response);
-          this.availableTimes = response.availableTimes.map((time: string) => ({
-            time: time,
-            isBooked: response.bookedTimes ? response.bookedTimes.includes(time) : false
-          }));
-          console.log('Mapped availableTimes:', this.availableTimes);
+      this.bookingService.getAvailableTimes(this.selectedDate, this.selectedTherapist).subscribe(
+        times => {
+          this.availableTimes = times.map(time => ({ time, isBooked: false }));
         },
-        error: (error) => {
+        error => {
           console.error('Error fetching available times:', error);
-          this.availableTimes = [];
         }
-      });
+      );
     }
   }
 
   onSubmit() {
-    if (this.isFormValid()) {
-      const booking = {
-        treatmentName: this.treatmentName,
-        treatmentPrice: this.treatmentPrice,
-        date: this.selectedDateString,
-        time: this.selectedTime,
-        therapist: this.selectedTherapist,
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email
-      };
-
-      console.log('Submitting booking:', booking);
-      this.bookingService.saveBooking(booking).subscribe({
-        next: (response) => {
-          console.log('Booking saved successfully:', response);
-          this.router.navigate(['/confirmation'], { state: { booking: booking } });
-        },
-        error: (error) => {
-          console.error('Error saving booking:', error);
-        }
-      });
-    }
+    const bookingData = {
+      treatmentName: this.treatmentName,
+      treatmentPrice: this.treatmentPrice,
+      date: this.selectedDateString,
+      time: this.selectedTime,
+      therapist: this.selectedTherapist,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email
+    };
+    this.bookingService.saveBooking(bookingData).subscribe(
+      response => {
+        console.log('Booking saved successfully:', response);
+        // Här kan du lägga till logik för att navigera till en bekräftelsesida
+      },
+      error => {
+        console.error('Error saving booking:', error);
+      }
+    );
   }
 
   isFormValid(): boolean {
-    return !!(this.selectedDate && this.selectedTherapist && this.selectedTime &&
-      this.firstName && this.lastName && this.email && this.treatmentName && this.treatmentPrice);
+    return !!this.selectedDate &&
+           !!this.selectedTherapist &&
+           !!this.selectedTime &&
+           !!this.firstName &&
+           !!this.lastName &&
+           !!this.email;
+  }
+
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date >= today && !this.isDateFullyBooked(date);
+  }
+
+  dateClass = (date: Date): string => {
+    return this.isDateFullyBooked(date) ? 'fully-booked' : '';
+  }
+
+  isDateFullyBooked(date: Date): boolean {
+    return this.fullyBookedDates.some(bookedDate =>
+      bookedDate.getFullYear() === date.getFullYear() &&
+      bookedDate.getMonth() === date.getMonth() &&
+      bookedDate.getDate() === date.getDate()
+    );
   }
 }
