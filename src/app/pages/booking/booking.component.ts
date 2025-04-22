@@ -40,10 +40,10 @@ export class BookingComponent implements OnInit {
   firstName: string = '';
   lastName: string = '';
   email: string = '';
-
   therapists: string[] = ['Sebastian', 'Jhoselin'];
   availableTimes: TimeSlot[] = [];
   fullyBookedDates: Date[] = [];
+  showBookedMessage: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -57,16 +57,30 @@ export class BookingComponent implements OnInit {
       this.treatmentPrice = params['price'] || '';
     });
 
+    // Hämta fullbokade datum från API
     this.bookingService.getFullyBookedDates().subscribe(
       dates => {
-        this.fullyBookedDates = dates.map(dateString => new Date(dateString));
-        console.log('Fully booked dates:', this.fullyBookedDates);
-        this.changeDetectorRef.detectChanges();
+        // Konvertera strängar till Date-objekt
+        this.fullyBookedDates = dates.map(dateString => {
+          // Skapa ett nytt Date-objekt med korrekt tidszon
+          // Använd YYYY-MM-DD formatet för att undvika tidszonsförskjutningar
+          const [year, month, day] = dateString.split('-').map(Number);
+          const date = new Date(year, month - 1, day); // Månader är 0-indexerade i JavaScript
+          console.log(`Konverterar datum: ${dateString} -> ${date.toISOString()}`);
+          return date;
+        });
+
+        console.log('Fullbokade datum efter konvertering:', this.fullyBookedDates);
+
+        // Tvinga uppdatering av kalendern
+        setTimeout(() => {
+          this.changeDetectorRef.markForCheck();
+          this.changeDetectorRef.detectChanges();
+        }, 100);
       },
-      error => console.error('Error fetching fully booked dates:', error)
+      error => console.error('Fel vid hämtning av fullbokade datum:', error)
     );
   }
-
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
     const today = new Date();
@@ -77,10 +91,22 @@ export class BookingComponent implements OnInit {
   onDateSelect(event: Date | null) {
     if (event) {
       if (this.isDateFullyBooked(event)) {
-        alert('This date is fully booked!'); // Visa ett meddelande till användaren
+        console.log('Försöker välja fullbokat datum:', event);
+
+        // Visa meddelandet
+        this.showBookedMessage = true;
+
+        // Dölj meddelandet efter 3 sekunder
+        setTimeout(() => {
+          this.showBookedMessage = false;
+          this.changeDetectorRef.detectChanges();
+        }, 3000);
+
+        // Återställ valet
         this.selectedDate = null;
         this.selectedDateString = '';
       } else {
+        this.showBookedMessage = false;
         this.selectedDate = new Date(event.getTime() - event.getTimezoneOffset() * 60000);
         this.selectedDateString = this.selectedDate.toISOString().split('T')[0];
         this.selectedTherapist = '';
@@ -88,6 +114,7 @@ export class BookingComponent implements OnInit {
         this.availableTimes = [];
       }
     } else {
+      this.showBookedMessage = false;
       this.selectedDate = null;
       this.selectedDateString = '';
       this.selectedTherapist = '';
@@ -95,7 +122,6 @@ export class BookingComponent implements OnInit {
       this.availableTimes = [];
     }
   }
-
   onTherapistSelect() {
     if (this.selectedDate && this.selectedTherapist) {
       this.getAvailableTimes();
@@ -150,19 +176,32 @@ export class BookingComponent implements OnInit {
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     if (view === 'month') {
-      const classes = [];
-      if (this.isDateFullyBooked(cellDate)) {
-        classes.push('fully-booked-date');
+      // Kontrollera om datumet är fullbokat
+      const isBooked = this.isDateFullyBooked(cellDate);
+
+      if (isBooked) {
+        console.log(`Datum ${cellDate.toISOString().split('T')[0]} markeras som fullbokat`);
+        return 'fully-booked-date';
       }
-      return classes.join(' ');
     }
     return '';
   }
   isDateFullyBooked(date: Date): boolean {
-    const adjustedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    if (!date || !this.fullyBookedDates || this.fullyBookedDates.length === 0) {
+      return false;
+    }
+
+    // Förenkla jämförelsen genom att bara jämföra år, månad och dag
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+
     return this.fullyBookedDates.some(bookedDate => {
-      const adjustedBookedDate = new Date(bookedDate.getTime() - bookedDate.getTimezoneOffset() * 60000);
-      return adjustedBookedDate.toISOString().split('T')[0] === adjustedDate.toISOString().split('T')[0];
+      return (
+        bookedDate.getFullYear() === year &&
+        bookedDate.getMonth() === month &&
+        bookedDate.getDate() === day
+      );
     });
   }
 }

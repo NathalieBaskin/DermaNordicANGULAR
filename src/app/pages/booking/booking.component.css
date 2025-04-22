@@ -44,8 +44,10 @@ input[readonly] {
 
 .calendar-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 20px;
+  position: relative;
 }
 
 mat-calendar {
@@ -54,7 +56,7 @@ mat-calendar {
 }
 
 button[type="submit"] {
-  background-color: #3f51b5;
+  background-color: #8b8c96;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -65,45 +67,76 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover:not([disabled]) {
-  background-color: #303f9f;
+  background-color: #9aa6ee;
 }
 
 button[type="submit"]:disabled {
-  background-color: #ff0000;
+  background-color: #000000;
   cursor: not-allowed;
 }
 
-.mat-calendar-body-cell.fully-booked-date {
+/* HELT NY METOD FÖR FULLBOKADE DATUM */
+::ng-deep .mat-calendar-body-cell.fully-booked-date {
   position: relative;
-  background-color: red !important; /* Se till att !important används för att överstyra andra stilar */
-  border-radius: 100%;
-  pointer-events: none; /* Gör datumet oklickbart */
+  pointer-events: none !important;
 }
 
-.mat-calendar-body-cell.fully-booked-date .mat-calendar-body-cell-content {
-  color: white; /* Ändra textfärgen för bättre kontrast */
+/* Använd ::before för att skapa en perfekt röd cirkel */
+::ng-deep .mat-calendar-body-cell.fully-booked-date::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  background-color: #ff0000;
+  border-radius: 50%;
+  z-index: 1;
 }
 
-.mat-calendar-body-cell.fully-booked-date::after {
-  content: 'Fully Booked!';
+/* Placera datumsiffran ovanpå cirkeln */
+::ng-deep .mat-calendar-body-cell.fully-booked-date .mat-calendar-body-cell-content {
+  background-color: transparent !important;
+  color: white !important;
+  font-weight: bold !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* Tooltip för fullbokade datum */
+::ng-deep .mat-calendar-body-cell.fully-booked-date:hover::after {
+  content: 'Fullbokat!';
   position: absolute;
   top: -30px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(255, 0, 0, 0.9);
   color: white;
-  padding: 5px;
-  border-radius: 3px;
+  padding: 5px 8px;
+  border-radius: 4px;
   font-size: 12px;
-  opacity: 0;
-  transition: opacity 0.2s;
-  pointer-events: none;
   white-space: nowrap;
+  z-index: 1000;
 }
 
-.mat-calendar-body-cell.fully-booked-date:hover::after {
-  opacity: 1;
+/* Stil för meddelandet som visas när man klickar på ett fullbokat datum */
+.booked-message {
+  background-color: #ff0000;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  animation: fadeIn 0.3s forwards;
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (max-width: 600px) {
   :host {
     padding: 10px;

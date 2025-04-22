@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,11 @@ export class BookingService {
   saveBooking(bookingData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/bookings`, bookingData);
   }
+
   getFullyBookedDates(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/fully-booked-dates`);
+    return this.http.get<string[]>(`${this.apiUrl}/fully-booked-dates`).pipe(
+      tap(dates => console.log('API svar (fullbokade datum):', dates))
+    );
   }
 
   getAvailableTimes(date: Date, therapist: string): Observable<string[]> {

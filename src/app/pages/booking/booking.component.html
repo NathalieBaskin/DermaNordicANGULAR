@@ -13,13 +13,17 @@
 
   <div class="calendar-container">
     <mat-calendar
-    [(selected)]="selectedDate"
-    (selectedChange)="onDateSelect($event)"
-    [dateClass]="dateClass"
-    [dateFilter]="dateFilter"
-  >
-  </mat-calendar>
-    </div>
+      [(selected)]="selectedDate"
+      (selectedChange)="onDateSelect($event)"
+      [dateClass]="dateClass"
+      [dateFilter]="dateFilter"
+      matTooltip="Röda datum är fullbokade">
+    </mat-calendar>
+  </div>
+
+  <div *ngIf="showBookedMessage" class="booked-message">
+    Fully Booked!
+  </div>
 
   <div class="form-group">
     <label for="selectedDate">Selected Date:</label>
