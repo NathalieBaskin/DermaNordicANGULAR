@@ -12,10 +12,12 @@
   </div>
 
   <div class="calendar-container">
-    <mat-calendar [(selected)]="selectedDate"
-                  (selectedChange)="onDateSelect($event)"
-                  [dateFilter]="dateFilter"
-                  [dateClass]="dateClass">
+    <mat-calendar
+      [(selected)]="selectedDate"
+      (selectedChange)="onDateSelect($event)"
+      [dateFilter]="dateFilter"
+      [dateClass]="dateClass"
+    >
     </mat-calendar>
   </div>
 

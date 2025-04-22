@@ -72,7 +72,56 @@ button[type="submit"]:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
+.fully-booked {
+  background-color: red !important;
+  border-radius: 100%;
+}
 
+.custom-tooltip {
+  position: relative;
+}
+
+.custom-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.custom-tooltip:hover::after {
+  opacity: 1;
+}
+.fully-booked-date {
+  background-color: red !important;
+  border-radius: 100%;
+  color: white;
+}
+
+.fully-booked-date::after {
+  content: 'Fully booked';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.fully-booked-date:hover::after {
+  opacity: 1;
+}
 @media (max-width: 600px) {
   :host {
     padding: 10px;

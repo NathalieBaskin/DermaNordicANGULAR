@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BookingService } from '../../services/booking.service';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 
 interface TimeSlot {
   time: string;
@@ -22,7 +24,8 @@ interface TimeSlot {
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTooltipModule
   ],
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.css']
@@ -44,7 +47,8 @@ export class BookingComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -52,24 +56,30 @@ export class BookingComponent implements OnInit {
       this.treatmentName = params['treatment'] || '';
       this.treatmentPrice = params['price'] || '';
     });
-    this.getFullyBookedDates();
-  }
 
-  getFullyBookedDates() {
     this.bookingService.getFullyBookedDates().subscribe(
       dates => {
-        this.fullyBookedDates = dates.map(date => new Date(date));
+        this.fullyBookedDates = dates.map(dateString => {
+          const date = new Date(dateString);
+          return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        });
+        this.changeDetectorRef.detectChanges();
       },
-      error => {
-        console.error('Error fetching fully booked dates:', error);
-      }
+      error => console.error('Error fetching fully booked dates:', error)
     );
   }
 
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date >= today && !this.isDateFullyBooked(date);
+  }
+
   onDateSelect(event: Date | null) {
-    if (event) {
-      this.selectedDate = event;
-      this.selectedDateString = event.toISOString().split('T')[0];
+    if (event && !this.isDateFullyBooked(event)) {
+      this.selectedDate = new Date(event.getTime() - event.getTimezoneOffset() * 60000);
+      this.selectedDateString = this.selectedDate.toISOString().split('T')[0];
       this.selectedTherapist = '';
       this.selectedTime = '';
       this.availableTimes = [];
@@ -90,12 +100,14 @@ export class BookingComponent implements OnInit {
 
   getAvailableTimes() {
     if (this.selectedDate && this.selectedTherapist) {
-      this.bookingService.getAvailableTimes(this.selectedDate, this.selectedTherapist).subscribe(
+      const dateString = this.selectedDate.toISOString().split('T')[0];
+      this.bookingService.getAvailableTimes(new Date(dateString), this.selectedTherapist).subscribe(
         times => {
           this.availableTimes = times.map(time => ({ time, isBooked: false }));
         },
         error => {
           console.error('Error fetching available times:', error);
+          this.availableTimes = [];
         }
       );
     }
@@ -132,22 +144,25 @@ export class BookingComponent implements OnInit {
            !!this.email;
   }
 
-  dateFilter = (date: Date | null): boolean => {
-    if (!date) return false;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date >= today && !this.isDateFullyBooked(date);
+  dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
+    if (view === 'month') {
+      const classes = [];
+      if (this.isDateFullyBooked(cellDate)) {
+        classes.push('fully-booked-date');
+      }
+      return classes.join(' ');
+    }
+    return '';
   }
-
-  dateClass = (date: Date): string => {
-    return this.isDateFullyBooked(date) ? 'fully-booked' : '';
+  addTooltip = (date: Date): string => {
+    return this.isDateFullyBooked(date) ? 'Fully booked' : '';
   }
 
   isDateFullyBooked(date: Date): boolean {
-    return this.fullyBookedDates.some(bookedDate =>
-      bookedDate.getFullYear() === date.getFullYear() &&
-      bookedDate.getMonth() === date.getMonth() &&
-      bookedDate.getDate() === date.getDate()
-    );
+    const adjustedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return this.fullyBookedDates.some(bookedDate => {
+      const adjustedBookedDate = new Date(bookedDate.getTime() - bookedDate.getTimezoneOffset() * 60000);
+      return adjustedBookedDate.toISOString().split('T')[0] === adjustedDate.toISOString().split('T')[0];
+    });
   }
 }
