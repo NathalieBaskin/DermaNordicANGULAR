@@ -8,8 +8,17 @@ import { tap } from 'rxjs/operators';
 })
 export class BookingService {
   private apiUrl = 'http://localhost:3000/api';
+  private tempBookingData: any;
 
   constructor(private http: HttpClient) {}
+
+  setTempBooking(data: any) {
+    this.tempBookingData = data;
+  }
+
+  getTempBooking() {
+    return this.tempBookingData;
+  }
 
   saveBooking(bookingData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/bookings`, bookingData);
@@ -17,7 +26,7 @@ export class BookingService {
 
   getFullyBookedDates(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/fully-booked-dates`).pipe(
-      tap(dates => console.log('API svar (fullbokade datum):', dates))
+      tap(dates => console.log('API response (fully booked dates):', dates))
     );
   }
 

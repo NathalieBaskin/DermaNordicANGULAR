@@ -1,38 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-
-interface Booking {
-  treatmentName: string;
-  treatmentPrice: string;
-  date: string;
-  time: string;
-  therapist: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+import { RouterModule } from '@angular/router';
+import { BookingService } from '../../services/booking.service';
 
 @Component({
   selector: 'app-confirmation',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.css']
 })
 export class ConfirmationComponent implements OnInit {
-  booking: Booking | null = null;
+  bookingData: any;
 
-  constructor(private router: Router) {}
+  constructor(private bookingService: BookingService) {}
 
   ngOnInit() {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { booking: Booking } | undefined;
-
-    if (state && state.booking) {
-      this.booking = state.booking;
-    } else {
-      this.router.navigate(['/']);
-    }
+    this.bookingData = this.bookingService.getTempBooking();
   }
 }

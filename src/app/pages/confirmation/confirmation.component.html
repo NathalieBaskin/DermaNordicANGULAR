@@ -1,8 +1,11 @@
-<div *ngIf="booking">
-  <h2>Booking Confirmation</h2>
-  <p>Thank you for your booking!</p>
-  <p>Treatment: {{ booking.treatmentName }}</p>
-  <p>Date: {{ booking.date }}</p>
-  <p>Time: {{ booking.time }}</p>
-  <p>Therapist: {{ booking.therapist }}</p>
+<div class="confirmation-container">
+  <h2>Booking Confirmed!</h2>
+  <p>Thank you for your booking. Here are the details:</p>
+  <div *ngIf="bookingData">
+    <p>Treatment: {{ bookingData.treatmentName }}</p>
+    <p>Date: {{ bookingData.date | date:'fullDate' }}</p>
+    <p>Time: {{ bookingData.time }}</p>
+    <p>Therapist: {{ bookingData.therapist }}</p>
+  </div>
+  <button routerLink="/">Return to Home</button>
 </div>

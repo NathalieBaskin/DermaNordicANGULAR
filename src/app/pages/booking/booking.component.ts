@@ -30,7 +30,6 @@ interface TimeSlot {
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.css']
 })
-
 export class BookingComponent implements OnInit {
   treatmentName: string = '';
   treatmentPrice: string = '';
@@ -64,7 +63,8 @@ export class BookingComponent implements OnInit {
     { name: 'Dermaplaning', price: '$800 MXN' },
     { name: 'Microneedling', price: '$1000 MXN' },
     { name: 'Basic Facial', price: '$600 MXN' },
-    { name: 'Plasma Pen', price: '$1200 MXN' }
+    { name: 'Plasma Pen', price: '$1200 MXN' },
+    { name: 'Consultation', price: 'Free' }
   ];
 
   constructor(
@@ -76,13 +76,14 @@ export class BookingComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.isConsultation = params['consultation'] === 'true';
       if (params['treatment']) {
         this.treatmentName = params['treatment'];
         this.treatmentPrice = params['price'] || this.getTreatmentPrice(this.treatmentName);
+        this.isConsultation = this.treatmentName.toLowerCase() === 'consultation';
       } else {
         this.treatmentName = '';
         this.treatmentPrice = '';
+        this.isConsultation = false;
       }
     });
 
@@ -92,11 +93,10 @@ export class BookingComponent implements OnInit {
           const [year, month, day] = dateString.split('-').map(Number);
           return new Date(year, month - 1, day);
         });
-
         this.calendarReady = true;
         this.changeDetectorRef.detectChanges();
       },
-      error => console.error('Fel vid hämtning av fullbokade datum:', error)
+      error => console.error('Error fetching fully booked dates:', error)
     );
   }
 
@@ -110,7 +110,6 @@ export class BookingComponent implements OnInit {
   onDateSelect(event: Date | null) {
     if (event) {
       if (this.isDateFullyBooked(event)) {
-        console.log('Försöker välja fullbokat datum:', event);
         this.showBookedMessage = true;
         setTimeout(() => {
           this.showBookedMessage = false;
@@ -127,7 +126,6 @@ export class BookingComponent implements OnInit {
         this.availableTimes = [];
       }
     } else {
-      this.showBookedMessage = false;
       this.selectedDate = null;
       this.selectedDateString = '';
       this.selectedTherapist = '';
@@ -160,8 +158,10 @@ export class BookingComponent implements OnInit {
   onTreatmentSelect() {
     if (this.treatmentName) {
       this.treatmentPrice = this.getTreatmentPrice(this.treatmentName);
+      this.isConsultation = this.treatmentName.toLowerCase() === 'consultation';
     } else {
       this.treatmentPrice = '';
+      this.isConsultation = false;
     }
   }
 
@@ -174,28 +174,32 @@ export class BookingComponent implements OnInit {
     const bookingData = {
       treatmentName: this.treatmentName,
       treatmentPrice: this.treatmentPrice,
-      date: this.selectedDateString,
+      date: this.selectedDate,
       time: this.selectedTime,
       therapist: this.selectedTherapist,
       firstName: this.firstName,
       lastName: this.lastName,
-      email: this.email,
-      isConsultation: this.isConsultation
+      email: this.email
     };
-    this.bookingService.saveBooking(bookingData).subscribe(
-      response => {
-        console.log('Booking saved successfully:', response);
-        this.showBookingConfirmation = true;
-        this.changeDetectorRef.detectChanges();
-        setTimeout(() => {
-          this.showBookingConfirmation = false;
-          this.router.navigate(['/']);
-        }, 2000);
-      },
-      error => {
-        console.error('Error saving booking:', error);
-      }
-    );
+
+    if (this.treatmentName.toLowerCase() === 'consultation') {
+      this.bookingService.saveBooking(bookingData).subscribe(
+        response => {
+          console.log('Consultation booked:', response);
+          this.showBookingConfirmation = true;
+          setTimeout(() => {
+            this.showBookingConfirmation = false;
+            this.router.navigate(['/']);
+          }, 3000);
+        },
+        error => {
+          console.error('Error booking consultation:', error);
+        }
+      );
+    } else {
+      this.bookingService.setTempBooking(bookingData);
+      this.router.navigate(['/payment']);
+    }
   }
 
   isFormValid(): boolean {
@@ -211,27 +215,16 @@ export class BookingComponent implements OnInit {
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     if (view === 'month') {
       const isBooked = this.isDateFullyBooked(cellDate);
-      if (isBooked) {
-        console.log(`Datum ${cellDate.toISOString().split('T')[0]} markeras som fullbokat`);
-        return 'fully-booked-date';
-      }
+      return isBooked ? 'fully-booked-date' : '';
     }
     return '';
   }
 
   isDateFullyBooked(date: Date): boolean {
-    if (!date || !this.fullyBookedDates || this.fullyBookedDates.length === 0) {
-      return false;
-    }
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    return this.fullyBookedDates.some(bookedDate => {
-      return (
-        bookedDate.getFullYear() === year &&
-        bookedDate.getMonth() === month &&
-        bookedDate.getDate() === day
-      );
-    });
+    return this.fullyBookedDates.some(bookedDate =>
+      bookedDate.getFullYear() === date.getFullYear() &&
+      bookedDate.getMonth() === date.getMonth() &&
+      bookedDate.getDate() === date.getDate()
+    );
   }
 }

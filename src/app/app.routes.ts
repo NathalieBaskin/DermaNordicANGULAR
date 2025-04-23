@@ -10,6 +10,7 @@ import { SearchComponent } from './pages/search/search.component';
 import { PricesComponent } from './pages/prices/prices.component';
 import { PaymentComponent } from './pages/payment/payment.component';
 
+
 export const routes: Routes = [
   { path: '', component: StartsidaComponent },
   { path: 'dermaplaning', component: DermaplaningComponent },

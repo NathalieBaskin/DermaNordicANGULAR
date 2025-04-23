@@ -1,13 +1,38 @@
-<div *ngIf="bookingData">
-  <h2>Betalning för {{ bookingData.treatmentName }}</h2>
-  <p>Totalt belopp: {{ bookingData.treatmentPrice }}</p>
-  <p>Datum: {{ bookingData.date }}</p>
-  <p>Tid: {{ bookingData.time }}</p>
-  <p>Terapeut: {{ bookingData.therapist }}</p>
+<div class="payment-container" *ngIf="bookingData">
+  <h2>Payment for {{ bookingData.treatmentName }}</h2>
+  <div class="booking-summary">
+    <p>Total amount: {{ bookingData.treatmentPrice }}</p>
+    <p>Date: {{ bookingData.date | date:'mediumDate' }}</p>
+    <p>Time: {{ bookingData.time }}</p>
+    <p>Therapist: {{ bookingData.therapist }}</p>
+  </div>
 
-  <!-- Lägg till ditt betalningsformulär här -->
-  <form (ngSubmit)="processPayment()">
-    <!-- Lägg till betalningsfält (kreditkort, etc.) här -->
-    <button type="submit">Betala nu</button>
+  <div class="payment-options">
+    <button (click)="selectPaymentOption('onsite')" [class.selected]="paymentOption === 'onsite'">Pay on Site</button>
+  </div>
+
+  <form (ngSubmit)="processPayment()" class="payment-form" *ngIf="paymentOption === 'card'">
+    <div class="form-group">
+      <label for="cardNumber">Card Number:</label>
+      <input type="text" id="cardNumber" [(ngModel)]="cardNumber" name="cardNumber" maxlength="16" required>
+    </div>
+    <div class="form-group">
+      <label for="expiryDate">Expiry Date (MM/YY):</label>
+      <input type="text" id="expiryDate" [(ngModel)]="expiryDate" name="expiryDate" maxlength="5" required>
+    </div>
+    <div class="form-group">
+      <label for="cvv">CVV:</label>
+      <input type="text" id="cvv" [(ngModel)]="cvv" name="cvv" maxlength="3" required>
+    </div>
+    <div class="form-group">
+      <label for="nameOnCard">Name on Card:</label>
+      <input type="text" id="nameOnCard" [(ngModel)]="nameOnCard" name="nameOnCard" required>
+    </div>
+    <button type="submit" [disabled]="!isPaymentFormValid()">Pay Now</button>
   </form>
+
+  <div *ngIf="paymentOption === 'onsite'" class="onsite-payment-info">
+    <p>You have chosen to pay on site. Your booking will be confirmed, and payment will be collected at the time of your appointment.</p>
+    <button (click)="confirmOnsitePayment()">Confirm Booking</button>
+  </div>
 </div>
