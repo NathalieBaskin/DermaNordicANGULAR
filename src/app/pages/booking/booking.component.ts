@@ -76,7 +76,11 @@ export class BookingComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      if (params['treatment']) {
+      if (params['consultation'] === 'true') {
+        this.treatmentName = 'Consultation';
+        this.treatmentPrice = 'Free';
+        this.isConsultation = true;
+      } else if (params['treatment']) {
         this.treatmentName = params['treatment'];
         this.treatmentPrice = params['price'] || this.getTreatmentPrice(this.treatmentName);
         this.isConsultation = this.treatmentName.toLowerCase() === 'consultation';
