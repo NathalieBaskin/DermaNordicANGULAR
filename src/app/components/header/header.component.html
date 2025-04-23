@@ -6,19 +6,14 @@
   </div>
 
   <nav class="nav">
-    <div class="nav-right">
-      <form (ngSubmit)="handleSearch($event)" class="search-form">
-        <input
-          type="text"
-          [(ngModel)]="searchQuery"
-          name="searchQuery"
-          placeholder="Search for treatments..."
-          class="search-input"
-          (keyup.enter)="handleSearch($event)"
-        >
-      </form>
+    <div class="search-container">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        placeholder="Sök produkt..."
+        class="search-input"
+      >
     </div>
-
-
   </nav>
 </header>

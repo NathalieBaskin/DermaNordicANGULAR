@@ -8,39 +8,18 @@
   border-top: 2px solid black;
   width: 100%;
   padding: 10px;
-
 }
 
-.footer-title{
-  font-size: 10px;
+.footer-title {
+  font-size: 18px;
   font-weight: bold;
   margin-bottom: 0;
   margin-top: 0;
 }
 
-.footer-name{
+.footer-name {
   font-size: 16px;
   font-weight: normal;
   margin-top: 0;
   margin-bottom: 1rem;
-
-}
-
-
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.app-container {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
 }

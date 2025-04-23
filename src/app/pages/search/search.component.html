@@ -1,0 +1,11 @@
+<div class="search-results-header">
+  <h2>Search results for "{{ searchTerm }}"</h2>
+  <p>Found {{ filteredResults.length }} products</p>
+</div>
+
+<section class="treatments">
+  <a *ngFor="let treatment of filteredResults" class="treatment-card" [routerLink]="[treatment.route]">
+    <h3>{{ treatment.name }}</h3>
+    <p>{{ treatment.description }}</p>
+  </a>
+</section>
