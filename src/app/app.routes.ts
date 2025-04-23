@@ -7,6 +7,7 @@ import { PlasmapenComponent } from './pages/plasmapen/plasmapen.component';
 import { BookingComponent } from './pages/booking/booking.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SearchComponent } from './pages/search/search.component';
+import { PricesComponent } from './pages/prices/prices.component';
 
 export const routes: Routes = [
   { path: '', component: StartsidaComponent },
@@ -17,4 +18,5 @@ export const routes: Routes = [
   { path: 'booking', component: BookingComponent},
   { path: 'confirmation', component: ConfirmationComponent },
   { path: 'sok', component: SearchComponent },
-];
+{ path: 'prices', component: PricesComponent},
+]

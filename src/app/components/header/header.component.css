@@ -7,18 +7,34 @@
   font-size: 1em;
 }
 
-
-
 .logo {
   width: 20%;
   height: auto;
 }
 
+.search-and-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  width: 200px;
+  font-size: 0.9em;
+}
 
 .social-cart {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 10px;
 }
 
 .social-icon {
@@ -31,20 +47,20 @@
   width: 40px;
   height: 40px;
 }
+
 .cart {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.7em;
+  font-size: 1.3em;
   color: #333;
   background-color: white;
   text-decoration: none;
   width: 40px;
   height: 40px;
   border: none;
-  margin-left: 0;
+  cursor: pointer;
 }
-
 
 .social-icon svg,
 .cart svg {
@@ -52,35 +68,8 @@
   height: 24px;
 }
 
-.search-form {
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  padding: 10px 20px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  margin-right: 0.5rem;
-  width: 200px;
-  font-size: 0.9em;
-}
-
-
-
-/* Uppdatera media query för responsivitet */
-@media (max-width: 640px) {
-  .search-form {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .search-input {
-    width: calc(100% - 80px); /* Justerar bredden för att passa med knappen */
-  }
-}
-
-@media (max-width: 640px) {
+/* Uppdaterad media query för responsivitet */
+@media (max-width: 768px) {
   .header {
     flex-direction: column;
     align-items: center;
@@ -90,6 +79,20 @@
     margin-bottom: 10px;
   }
 
+  .search-and-icons {
+    flex-direction: column;
+    gap: 10px;
+  }
 
+  .search-form {
+    width: 100%;
+  }
 
+  .search-input {
+    width: 100%;
+  }
+
+  .social-cart {
+    justify-content: center;
+  }
 }

@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-prices',
-  imports: [],
+  standalone: true,
+  imports: [RouterModule],
   templateUrl: './prices.component.html',
-  styleUrl: './prices.component.css'
+  styleUrls: ['./prices.component.css']
 })
 export class PricesComponent {
-
+  // Komponentlogik här
 }
