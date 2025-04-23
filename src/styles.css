@@ -4,3 +4,36 @@ html, body {
   padding: 0;
   overflow-x: hidden;
 }
+@font-face {
+  font-family: 'Silksemi';
+  src: url('/assets/fonts/Silksemi.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Silkmedium';
+  src: url('/assets/fonts/Silkmedium.otf') format('opentype');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Silkmedium', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Silksemi', sans-serif;
+}
+
+p, a, span, li {
+  font-family: 'Silkmedium', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
