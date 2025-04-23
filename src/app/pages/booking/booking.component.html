@@ -6,13 +6,16 @@
   </div>
 
   <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="treatment">{{ isConsultation ? 'Consultation' : 'Treatment' }}:</label>
-      <input type="text" id="treatment" [value]="treatmentName" readonly>
+    <div class="form-group" *ngIf="!isConsultation">
+      <label for="treatment">Treatment:</label>
+      <select id="treatment" [(ngModel)]="treatmentName" name="treatment" (change)="onTreatmentSelect()">
+        <option value="">Select a treatment</option>
+        <option *ngFor="let treatment of treatments" [value]="treatment.name">{{ treatment.name }}</option>
+      </select>
     </div>
     <div class="form-group">
       <label for="price">Price:</label>
-      <input type="text" id="price" [value]="treatmentPrice" readonly>
+      <input type="text" id="price" [value]="isConsultation ? 'Free' : treatmentPrice" readonly>
     </div>
     <div class="calendar-container" *ngIf="calendarReady">
       <mat-calendar

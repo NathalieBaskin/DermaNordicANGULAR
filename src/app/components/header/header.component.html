@@ -5,22 +5,28 @@
     </a>
   </div>
 
-  <div class="search-and-icons">
-    <div class="search-form">
-      <input
-        type="text"
-        [(ngModel)]="searchTerm"
-        (keyup.enter)="onSearch()"
-        placeholder="Sök produkt..."
-        class="search-input"
-      >
+  <div class="header-right">
+    <div class="search-and-icons">
+      <div class="search-form">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+          placeholder="Sök produkt..."
+          class="search-input"
+        >
+      </div>
+
+      <div class="social-cart">
+        <a href="https://www.instagram.com/dermanordicmedspa/" class="social-icon" target="_blank" rel="noopener noreferrer">
+          <fa-icon [icon]="faInstagram" size="lg"></fa-icon>
+        </a>
+      </div>
     </div>
 
-    <div class="social-cart">
-      <a href="https://www.instagram.com/dermanordicmedspa/" class="social-icon" target="_blank" rel="noopener noreferrer">
-        <fa-icon [icon]="faInstagram" size="lg"></fa-icon>
-      </a>
-   
-    </div>
+    <nav class="header-nav">
+      <a routerLink="/booking" class="nav-link">Booking</a>
+      <a routerLink="/prices" class="nav-link">Prices</a>
+    </nav>
   </div>
 </header>

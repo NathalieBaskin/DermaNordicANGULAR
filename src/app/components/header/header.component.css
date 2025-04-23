@@ -12,6 +12,12 @@
   height: auto;
 }
 
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .search-and-icons {
   display: flex;
   align-items: center;
@@ -68,6 +74,21 @@
   height: 24px;
 }
 
+.header-nav {
+  margin-top: 10px;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
 /* Uppdaterad media query för responsivitet */
 @media (max-width: 768px) {
   .header {
@@ -77,6 +98,10 @@
 
   .logo-container {
     margin-bottom: 10px;
+  }
+
+  .header-right {
+    align-items: center;
   }
 
   .search-and-icons {
@@ -94,5 +119,16 @@
 
   .social-cart {
     justify-content: center;
+  }
+
+  .header-nav {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nav-link {
+    margin: 0 10px;
   }
 }

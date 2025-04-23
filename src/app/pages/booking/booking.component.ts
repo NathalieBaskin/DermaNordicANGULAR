@@ -58,9 +58,16 @@ export class BookingComponent implements OnInit {
     - Answer any questions you might have about our services
     This consultation is free of charge and carries no obligation. It's an opportunity for you to
     learn more about our treatments and for us to provide personalized recommendations.`;
-    showBookingConfirmation: boolean = false;
+  showBookingConfirmation: boolean = false;
 
-   constructor(
+  treatments: { name: string, price: string }[] = [
+    { name: 'Dermaplaning', price: '$800 MXN' },
+    { name: 'Microneedling', price: '$1000 MXN' },
+    { name: 'Basic Facial', price: '$600 MXN' },
+    { name: 'Plasma Pen', price: '$1200 MXN' }
+  ];
+
+  constructor(
     private route: ActivatedRoute,
     private router: Router,
     private bookingService: BookingService,
@@ -70,8 +77,13 @@ export class BookingComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.isConsultation = params['consultation'] === 'true';
-      this.treatmentName = this.isConsultation ? 'Consultation' : (params['treatment'] || '');
-      this.treatmentPrice = this.isConsultation ? 'Free' : (params['price'] || '');
+      if (params['treatment']) {
+        this.treatmentName = params['treatment'];
+        this.treatmentPrice = params['price'] || this.getTreatmentPrice(this.treatmentName);
+      } else {
+        this.treatmentName = '';
+        this.treatmentPrice = '';
+      }
     });
 
     this.bookingService.getFullyBookedDates().subscribe(
@@ -145,6 +157,19 @@ export class BookingComponent implements OnInit {
     }
   }
 
+  onTreatmentSelect() {
+    if (this.treatmentName) {
+      this.treatmentPrice = this.getTreatmentPrice(this.treatmentName);
+    } else {
+      this.treatmentPrice = '';
+    }
+  }
+
+  getTreatmentPrice(treatmentName: string): string {
+    const treatment = this.treatments.find(t => t.name === treatmentName);
+    return treatment ? treatment.price : '';
+  }
+
   onSubmit() {
     const bookingData = {
       treatmentName: this.treatmentName,
@@ -160,16 +185,12 @@ export class BookingComponent implements OnInit {
     this.bookingService.saveBooking(bookingData).subscribe(
       response => {
         console.log('Booking saved successfully:', response);
-        if (this.isConsultation) {
-          this.showBookingConfirmation = true;
-          this.changeDetectorRef.detectChanges(); // Tvinga uppdatering av vyn
-          setTimeout(() => {
-            this.showBookingConfirmation = false;
-            this.router.navigate(['/']);
-          }, 2000);
-        } else {
-          // Hantera vanliga behandlingsbokningar här om det behövs
-        }
+        this.showBookingConfirmation = true;
+        this.changeDetectorRef.detectChanges();
+        setTimeout(() => {
+          this.showBookingConfirmation = false;
+          this.router.navigate(['/']);
+        }, 2000);
       },
       error => {
         console.error('Error saving booking:', error);
@@ -183,7 +204,8 @@ export class BookingComponent implements OnInit {
            !!this.selectedTime &&
            !!this.firstName &&
            !!this.lastName &&
-           !!this.email;
+           !!this.email &&
+           (this.isConsultation || !!this.treatmentName);
   }
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
