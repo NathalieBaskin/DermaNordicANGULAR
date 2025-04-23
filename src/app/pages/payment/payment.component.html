@@ -1,0 +1,13 @@
+<div *ngIf="bookingData">
+  <h2>Betalning för {{ bookingData.treatmentName }}</h2>
+  <p>Totalt belopp: {{ bookingData.treatmentPrice }}</p>
+  <p>Datum: {{ bookingData.date }}</p>
+  <p>Tid: {{ bookingData.time }}</p>
+  <p>Terapeut: {{ bookingData.therapist }}</p>
+
+  <!-- Lägg till ditt betalningsformulär här -->
+  <form (ngSubmit)="processPayment()">
+    <!-- Lägg till betalningsfält (kreditkort, etc.) här -->
+    <button type="submit">Betala nu</button>
+  </form>
+</div>

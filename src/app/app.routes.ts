@@ -8,6 +8,7 @@ import { BookingComponent } from './pages/booking/booking.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SearchComponent } from './pages/search/search.component';
 import { PricesComponent } from './pages/prices/prices.component';
+import { PaymentComponent } from './pages/payment/payment.component';
 
 export const routes: Routes = [
   { path: '', component: StartsidaComponent },
@@ -19,4 +20,5 @@ export const routes: Routes = [
   { path: 'confirmation', component: ConfirmationComponent },
   { path: 'sok', component: SearchComponent },
 { path: 'prices', component: PricesComponent},
+{ path: 'payment', component: PaymentComponent },
 ]
