@@ -1,0 +1,22 @@
+<div class="cart-container">
+  <h2>Your Cart</h2>
+  <div *ngIf="cartItems.length === 0" class="empty-cart">
+    Your cart is empty.
+  </div>
+  <div *ngFor="let item of cartItems" class="cart-item">
+    <img [src]="item.imageUrl" [alt]="item.name" class="item-image">
+    <div class="item-details">
+      <h3>{{ item.name }}</h3>
+      <p>{{ item.price | currency:'$MXN ':'symbol':'1.0-0' }}</p>
+      <div class="quantity-controls">
+        <button (click)="updateQuantity(item, -1)">-</button>
+        <span>{{ item.quantity }}</span>
+        <button (click)="updateQuantity(item, 1)">+</button>
+      </div>
+    </div>
+    <button (click)="removeItem(item.id)" class="remove-item">Remove</button>
+  </div>
+  <div *ngIf="cartItems.length > 0" class="cart-total">
+    <h3>Total: {{ getTotal() | currency:'$MXN ':'symbol':'1.0-0' }}</h3>
+  </div>
+</div>
