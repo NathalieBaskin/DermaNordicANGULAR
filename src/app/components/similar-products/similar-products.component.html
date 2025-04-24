@@ -1,6 +1,11 @@
-<div class="similar-products" *ngIf="similarProducts.length > 0">
+<div class="similar-products">
   <h2>Similar Products</h2>
   <div class="product-slider">
-    <app-product-card *ngFor="let product of similarProducts" [product]="product" [showHoverEffect]="false"></app-product-card>
+    <div *ngFor="let product of similarProducts" class="product-card">
+      <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.price | currency:'$MXN ':'symbol':'1.0-0' }}</p>
+      <a [routerLink]="['/product', product.id]" class="view-details">View Details</a>
+    </div>
   </div>
 </div>
