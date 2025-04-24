@@ -14,7 +14,7 @@ import { ProductService, Product } from '../../services/product.service';
         <div *ngFor="let product of similarProducts"
              class="similar-product-card"
              (click)="navigateToProduct(product.id)">
-          <img [src]="product.hoverImageUrl" [alt]="product.name" class="product-image">
+          <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
           <div class="product-info">
             <span class="product-name">{{ product.name }}</span>
             <span class="product-price">{{ product.price | currency:'$MXN ':'symbol':'1.0-0' }}</span>

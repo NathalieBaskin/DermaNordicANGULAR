@@ -26,19 +26,23 @@
   transition: opacity 0.3s ease;
 }
 
-.hover-image {
+.default-image {
   position: absolute;
   top: 0;
   left: 0;
   opacity: 0;
 }
 
+.hover-image {
+  opacity: 1;
+}
+
 .product-card:hover .default-image {
-  opacity: 0;
+  opacity: 1;
 }
 
 .product-card:hover .hover-image {
-  opacity: 1;
+  opacity: 0;
 }
 
 h3 {

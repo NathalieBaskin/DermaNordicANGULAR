@@ -26,4 +26,8 @@ export class ProductCardComponent {
       this.isHovered = false;
     }
   }
+
+  get displayedImage(): string {
+    return this.isHovered ? this.product.imageUrl : this.product.hoverImageUrl;
+  }
 }

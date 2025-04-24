@@ -16,14 +16,14 @@ export interface Product {
 })
 export class ProductService {
   private products: Product[] = [
-    { id: 1, name: 'Facial Cleanser', description: 'Gentle daily cleanser', price: 250, imageUrl: 'assets/products/cleanser-product.jpg', hoverImageUrl: 'assets/products/cleanser.png', category: 'Skin' },
-    { id: 2, name: 'Moisturizer', description: 'Hydrating face cream', price: 350, imageUrl: 'assets/products/moisturizer-product.jpg', hoverImageUrl: 'assets/products/moisturizer.png', category: 'Skin' },
-    { id: 3, name: 'Sunscreen', description: 'SPF 50 protection', price: 200, imageUrl: 'assets/products/sunscreen.jpg', hoverImageUrl: 'assets/products/sunscreen-product.jpeg', category: 'Skin' },
-    { id: 4, name: 'Serum', description: 'Anti-aging formula', price: 450, imageUrl: 'assets/products/serum.jpg', hoverImageUrl: 'assets/products/serum-product.png', category: 'Skin' },
-    { id: 5, name: 'Eye Cream', description: 'Reduces dark circles', price: 300, imageUrl: 'assets/products/eyecream.jpg', hoverImageUrl: 'assets/products/eyecream-product.png', category: 'Skin' },
-    { id: 6, name: 'Face Mask', description: 'Hydrating sheet mask', price: 50, imageUrl: 'assets/products/facemask.jpeg', hoverImageUrl: 'assets/products/facemask-product.png', category: 'Skin' },
-    { id: 7, name: 'Toner', description: 'Balancing toner', price: 180, imageUrl: 'assets/products/toner.jpg', hoverImageUrl: 'assets/products/toner-product.png', category: 'Skin' },
-    { id: 8, name: 'Exfoliator', description: 'Gentle scrub', price: 220, imageUrl: 'assets/products/exfoliator.jpg', hoverImageUrl: 'assets/products/exfoliator-product.png', category: 'Skin' }
+    { id: 1, name: 'Facial Cleanser', description: 'Gentle daily cleanser', price: 250, imageUrl: 'assets/products/cleanser.png', hoverImageUrl: 'assets/products/cleanser-product.jpg', category: 'Skin' },
+    { id: 2, name: 'Moisturizer', description: 'Hydrating face cream', price: 350, imageUrl: 'assets/products/moisturizer.png', hoverImageUrl: 'assets/products/moisturizer-product.jpg', category: 'Skin' },
+    { id: 3, name: 'Sunscreen', description: 'SPF 50 protection', price: 200, imageUrl: 'assets/products/sunscreen-product.jpeg', hoverImageUrl: 'assets/products/sunscreen.jpg', category: 'Skin' },
+    { id: 4, name: 'Serum', description: 'Anti-aging formula', price: 450, imageUrl: 'assets/products/serum-product.png', hoverImageUrl: 'assets/products/serum.jpg', category: 'Skin' },
+    { id: 5, name: 'Eye Cream', description: 'Reduces dark circles', price: 300, imageUrl: 'assets/products/eyecream-product.png', hoverImageUrl: 'assets/products/eyecream.jpg', category: 'Skin' },
+    { id: 6, name: 'Face Mask', description: 'Hydrating sheet mask', price: 50, imageUrl: 'assets/products/facemask-product.png', hoverImageUrl: 'assets/products/facemask.jpeg', category: 'Skin' },
+    { id: 7, name: 'Toner', description: 'Balancing toner', price: 180, imageUrl: 'assets/products/toner-product.png', hoverImageUrl: 'assets/products/toner.jpg', category: 'Skin' },
+    { id: 8, name: 'Exfoliator', description: 'Gentle scrub', price: 220, imageUrl: 'assets/products/exfoliator-product.png', hoverImageUrl: 'assets/products/exfoliator.jpg', category: 'Skin' }
   ];
 
   constructor() { }
