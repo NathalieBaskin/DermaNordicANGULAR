@@ -2,9 +2,29 @@
   <h2>Search results for "{{ searchTerm }}"</h2>
 </div>
 
-<section class="treatments">
-  <a *ngFor="let treatment of filteredResults" class="treatment-card" [routerLink]="[treatment.route]">
-    <h3>{{ treatment.name }}</h3>
-    <p>{{ treatment.description }}</p>
-  </a>
-</section>
+<ng-container *ngIf="filteredTreatments.length > 0">
+  <h3>Treatments</h3>
+  <section class="treatments">
+    <a *ngFor="let treatment of filteredTreatments" class="treatment-card" [routerLink]="[treatment.route]">
+      <h4>{{ treatment.name }}</h4>
+      <p>{{ treatment.description }}</p>
+    </a>
+  </section>
+</ng-container>
+
+<ng-container *ngIf="filteredProducts.length > 0">
+  <h3>Products</h3>
+  <section class="products">
+    <div *ngFor="let product of filteredProducts"
+         class="product-card"
+         [routerLink]="['/product', product.id]">
+      <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
+      <h4>{{ product.name }}</h4>
+      <p>{{ product.price | currency:'SEK':'symbol':'1.0-0' }}</p>
+    </div>
+  </section>
+</ng-container>
+
+<p *ngIf="filteredTreatments.length === 0 && filteredProducts.length === 0">
+  Inga resultat hittades för din sökning.
+</p>
