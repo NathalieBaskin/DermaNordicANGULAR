@@ -7,15 +7,23 @@ import { Product } from '../../services/product.service';
   selector: 'app-product-card',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  template: `
-    <div class="product-card" [routerLink]="['/product', product.id]">
-      <img [src]="product.hoverImageUrl" [alt]="product.name" class="product-image">
-      <h3>{{ product.name }}</h3>
-      <p>{{ product.price | currency:'$MXN ':'symbol':'1.0-0' }}</p>
-    </div>
-  `,
+  templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css']
 })
 export class ProductCardComponent {
   @Input() product!: Product;
+  @Input() showHoverEffect: boolean = true;
+  isHovered: boolean = false;
+
+  onMouseEnter() {
+    if (this.showHoverEffect) {
+      this.isHovered = true;
+    }
+  }
+
+  onMouseLeave() {
+    if (this.showHoverEffect) {
+      this.isHovered = false;
+    }
+  }
 }

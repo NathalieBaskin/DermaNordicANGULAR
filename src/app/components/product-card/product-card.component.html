@@ -1,7 +1,6 @@
-<div class="product-card" [routerLink]="['/product', product.id]">
+<div class="product-card" [routerLink]="['/product', product.id]" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
   <div class="image-container">
-    <img [src]="product.imageUrl" [alt]="product.name" class="product-image default-image">
-    <img [src]="product.hoverImageUrl" [alt]="product.name" class="product-image hover-image">
+    <img [src]="isHovered ? product.imageUrl : product.hoverImageUrl" [alt]="product.name" class="product-image">
   </div>
   <h3>{{ product.name }}</h3>
   <p>{{ product.price | currency:'$MXN ':'symbol':'1.0-0' }}</p>

@@ -12,7 +12,7 @@ import { ProductCardComponent } from '../product-card/product-card.component';
     <div class="similar-products" *ngIf="similarProducts.length > 0">
       <h2>Similar Products</h2>
       <div class="product-slider">
-        <app-product-card *ngFor="let product of similarProducts" [product]="product"></app-product-card>
+        <app-product-card *ngFor="let product of similarProducts" [product]="product" [showHoverEffect]="false"></app-product-card>
       </div>
     </div>
   `,
@@ -28,7 +28,10 @@ export class SimilarProductsComponent implements OnChanges {
   ngOnChanges() {
     if (this.category && this.excludeId) {
       this.productService.getSimilarProducts(this.category, this.excludeId).subscribe(products => {
-        this.similarProducts = products.slice(0, 4); // Limit to 4 similar products
+        this.similarProducts = products.slice(0, 4).map(product => ({
+          ...product,
+          imageUrl: product.hoverImageUrl // Use hoverImageUrl as the main image
+        }));
       });
     }
   }
