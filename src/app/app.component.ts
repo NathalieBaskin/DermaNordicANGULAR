@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule, Router, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { filter } from 'rxjs/operators';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -16,14 +17,37 @@ import { filter } from 'rxjs/operators';
   `,
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'nabaski';
+export class AppComponent implements OnInit, AfterViewInit {
+  title = 'DermaNordicMedSpa';
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private viewportScroller: ViewportScroller
+  ) {}
+
+  ngOnInit() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
-      window.scrollTo(0, 0);
+      this.scrollToTop();
     });
+  }
+
+  ngAfterViewInit() {
+    this.scrollToTop();
+  }
+
+  private scrollToTop() {
+    this.viewportScroller.scrollToPosition([0, 0]);
+
+    // Fallback om ViewportScroller inte fungerar
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+
+    // Extra fallback för komplexa layouts eller långsamma enheter
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 100);
   }
 }

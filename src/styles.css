@@ -1,9 +1,17 @@
-html, body {
+html {
   height: 100%;
+  scroll-behavior: auto; /* Ändra till auto för omedelbar scrollning */
+}
+
+body {
+  min-height: 100%;
   margin: 0;
   padding: 0;
+  font-family: 'Silkmedium', sans-serif;
   overflow-x: hidden;
+  overflow-y: auto;
 }
+
 @font-face {
   font-family: 'Silksemi';
   src: url('/assets/fonts/Silksemi.otf') format('opentype');
@@ -12,12 +20,6 @@ html, body {
 @font-face {
   font-family: 'Silkmedium';
   src: url('/assets/fonts/Silkmedium.otf') format('opentype');
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Silkmedium', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -36,4 +38,11 @@ a {
 ul {
   list-style: none;
   padding: 0;
+}
+
+/* Lägg till denna klass för att hantera innehåll som kan orsaka horisontell scrollning */
+.content-wrapper {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
