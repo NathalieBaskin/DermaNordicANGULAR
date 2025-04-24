@@ -1,11 +1,31 @@
 <div class="confirmation-container">
-  <h2>Booking Confirmed!</h2>
-  <p>Thank you for your booking. Here are the details:</p>
-  <div *ngIf="bookingData">
-    <p>Treatment: {{ bookingData.treatmentName }}</p>
-    <p>Date: {{ bookingData.date | date:'fullDate' }}</p>
-    <p>Time: {{ bookingData.time }}</p>
-    <p>Therapist: {{ bookingData.therapist }}</p>
+  <h2>Confirmation</h2>
+
+  <div *ngIf="isBooking">
+    <h3>Booking Confirmed!</h3>
+    <p>Thank you for your booking. Here are the details:</p>
+    <ul>
+      <li>Treatment: {{ bookingData.treatmentName }}</li>
+      <li>Date: {{ bookingData.date | date:'fullDate' }}</li>
+      <li>Time: {{ bookingData.time }}</li>
+      <li>Therapist: {{ bookingData.therapist }}</li>
+    </ul>
   </div>
-  <button routerLink="/">Return to Home</button>
+
+  <div *ngIf="isOrder">
+    <h3>Order Confirmed!</h3>
+    <p>Thank you for your order. Here are the details:</p>
+    <ul>
+      <li *ngFor="let item of orderData.items">
+        {{ item.name }} - Quantity: {{ item.quantity }} - Price: {{ item.price | currency:'$MXN ':'symbol':'1.0-0' }}
+      </li>
+    </ul>
+    <p><strong>Total: {{ orderData.total | currency:'$MXN ':'symbol':'1.0-0' }}</strong></p>
+  </div>
+
+  <div *ngIf="!isBooking && !isOrder">
+    <p>No confirmation data available.</p>
+  </div>
+
+  <a routerLink="/" class="home-button">Return to Home</a>
 </div>
