@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
+import { BookingService } from '../../services/booking.service';
 
 @Component({
   selector: 'app-checkout',
@@ -28,7 +29,11 @@ export class CheckoutComponent implements OnInit {
   };
   isProcessing: boolean = false;
 
-  constructor(private cartService: CartService, private router: Router) {}
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+    private bookingService: BookingService
+  ) {}
 
   ngOnInit() {
     this.cartService.getCart().subscribe(items => {
@@ -43,9 +48,12 @@ export class CheckoutComponent implements OnInit {
     setTimeout(() => {
       const order = this.cartService.placeOrder({
         shipping: this.shippingInfo,
-        payment: this.paymentInfo
+        payment: this.paymentInfo,
+        items: this.cartItems,
+        total: this.total
       });
       console.log('Order placed:', order);
+      this.bookingService.clearTempBooking(); // Clear any existing booking data
       this.isProcessing = false;
       this.router.navigate(['/confirmation']);
     }, 2000); // Simulera en 2-sekunders betalningsprocess

@@ -4,7 +4,7 @@
     Your cart is empty. <a routerLink="/webshop">Continue shopping</a>
   </div>
   <div *ngFor="let item of cartItems" class="cart-item">
-    <img [src]="item.hoverImageUrl" [alt]="item.name" class="item-image">
+    <img [src]="item.imageUrl" [alt]="item.name" class="item-image">
     <div class="item-details">
       <h3>{{ item.name }}</h3>
       <p>{{ item.price | currency:'$MXN ':'symbol':'1.0-0' }}</p>

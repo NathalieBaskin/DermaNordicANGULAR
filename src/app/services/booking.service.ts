@@ -20,6 +20,10 @@ export class BookingService {
     return this.tempBookingData;
   }
 
+  clearTempBooking() {
+    this.tempBookingData = null;
+  }
+
   saveBooking(bookingData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/bookings`, bookingData);
   }

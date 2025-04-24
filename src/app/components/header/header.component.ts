@@ -24,7 +24,9 @@ export class HeaderComponent {
 
   onSearch() {
     if (this.searchTerm.trim()) {
-      this.router.navigate(['/sok'], { queryParams: { q: this.searchTerm } });
+      this.router.navigate(['/sok'], { queryParams: { q: this.searchTerm } }).then(() => {
+        this.searchTerm = ''; // Clear the search term after navigation
+      });
     }
   }
 
