@@ -9,7 +9,7 @@ padding: 100px 20px;
 }
 
 .hero h1 {
-font-size: 3em;
+font-size: 4em;
 margin-bottom: 20px;
 }
 
@@ -38,9 +38,11 @@ width: 200px;
 text-align: center;
 text-decoration: none;
 color: black;
+
 }
 
 .treatment-card h2 {
-font-size: 1.2em;
+font-size: 1.4em;
 margin-bottom: 10px;
+
 }

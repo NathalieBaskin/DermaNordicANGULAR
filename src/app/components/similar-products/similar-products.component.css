@@ -5,6 +5,7 @@
 h2 {
   margin-bottom: 20px;
   text-align: center;
+  font-size: 2.5em;
 }
 
 .product-slider {
@@ -35,7 +36,8 @@ h2 {
 }
 
 .product-name {
-  font-size: 14px;
+  font-size: 1.2em;
+  font-weight: bold;
   flex-grow: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -43,8 +45,8 @@ h2 {
 }
 
 .product-price {
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 1.2em;
+
   white-space: nowrap;
 }
 

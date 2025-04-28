@@ -21,7 +21,6 @@ body {
   font-family: 'Silkmedium';
   src: url('/assets/fonts/Silkmedium.otf') format('opentype');
 }
-
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Silksemi', sans-serif;
 }

@@ -5,21 +5,21 @@
   justify-content: center;
   text-align: center;
   background-color: #ffffff;
-  border-top: 1px solid black;
+  border-top: 0.3px solid black;
   width: 100%;
   padding: 10px;
 }
 
 .footer-title {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 2em;
   margin-bottom: 0;
-  margin-top: 0;
 }
 
 .footer-name {
   font-size: 16px;
-  font-weight: normal;
+}
+
+.footer-copyright {
   margin-top: 0;
-  margin-bottom: 1rem;
+font-size: 1em;
 }

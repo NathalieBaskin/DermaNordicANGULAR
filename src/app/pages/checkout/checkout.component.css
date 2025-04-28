@@ -10,6 +10,7 @@
 h2, h3 {
   color: #333;
   margin-bottom: 20px;
+  font-size: 2em;
 }
 
 .order-summary {
@@ -22,6 +23,7 @@ h2, h3 {
 .order-summary ul {
   list-style-type: none;
   padding: 0;
+
 }
 
 .order-summary li {
@@ -38,9 +40,9 @@ form {
 }
 
 label {
-  font-weight: bold;
   margin-bottom: 5px;
   display: block;
+  font-size: 1em;
 }
 
 input {
