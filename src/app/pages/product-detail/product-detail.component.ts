@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService, Product } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { SimilarProductsComponent } from '../../components/similar-products/similar-products.component';
-import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,9 +12,9 @@ import { Subscription } from 'rxjs';
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
 })
-export class ProductDetailComponent implements OnInit, OnDestroy {
+export class ProductDetailComponent implements OnInit {
   product: Product | undefined;
-  private productSubscription: Subscription | undefined;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -29,22 +28,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       this.loadProduct(productId);
     });
   }
-
-  ngOnDestroy() {
-    if (this.productSubscription) {
-      this.productSubscription.unsubscribe();
-    }
-  }
-
   loadProduct(id: number) {
-    console.log('Loading product with id:', id);
-    this.productSubscription = this.productService.getProductById(id).subscribe(
+    this.productService.getProductById(id).subscribe(
       product => {
         this.product = product;
-        console.log('Loaded product:', product);
-        if (!product) {
-          console.error('Product not found');
-        }
+        console.log('Product loaded:', this.product);
       },
       error => console.error('Error loading product:', error)
     );
@@ -52,5 +40,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
+    console.log('Product added to cart:', product);
   }
 }

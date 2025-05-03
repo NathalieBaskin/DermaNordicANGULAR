@@ -8,8 +8,4 @@
   </div>
 </div>
 
-<app-similar-products
-  *ngIf="product"
-  [category]="product.category"
-  [excludeId]="product.id">
-</app-similar-products>
+<app-similar-products [category]="product?.category" [excludeId]="product?.id"></app-similar-products>
