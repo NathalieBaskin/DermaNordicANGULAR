@@ -13,6 +13,7 @@ import { WebshopComponent } from './pages/webshop/webshop.component';
 import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { AdminComponent } from './pages/admin/admin.component';
 
 export const routes: Routes = [
   { path: '', component: StartsidaComponent },
@@ -28,5 +29,6 @@ export const routes: Routes = [
   { path: 'webshop', component: WebshopComponent },
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'checkout', component: CheckoutComponent }
+  { path: 'checkout', component: CheckoutComponent },
+  { path: 'admin', component: AdminComponent }
 ];

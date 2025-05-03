@@ -1,51 +1,61 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ProductService, Product } from '../../services/product.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-similar-products',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="similar-products" *ngIf="similarProducts.length > 0">
-      <h2>Similar Products</h2>
-      <div class="product-slider">
-        <div *ngFor="let product of similarProducts"
-             class="similar-product-card"
-             (click)="navigateToProduct(product.id)">
-          <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
-          <div class="product-info">
-            <span class="product-name">{{ product.name }}</span>
-            <span class="product-price">{{ product.price | currency:'$MXN ':'symbol':'1.0-0' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './similar-products.component.html',
   styleUrls: ['./similar-products.component.css']
 })
-export class SimilarProductsComponent implements OnChanges {
+export class SimilarProductsComponent implements OnChanges, OnInit, OnDestroy {
   @Input() category: string | undefined;
   @Input() excludeId: number | undefined;
   similarProducts: Product[] = [];
+  private productSubscription: Subscription | undefined;
 
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(private productService: ProductService) {}
 
-  ngOnChanges() {
-    if (this.category && this.excludeId) {
-      this.productService.getSimilarProducts(this.category, this.excludeId).subscribe(products => {
-        this.similarProducts = products.slice(0, 4);
-        console.log('Similar products loaded:', this.similarProducts);
-      });
+  ngOnInit() {
+    console.log('SimilarProductsComponent initialized');
+    this.loadSimilarProducts();
+    this.subscribeToProductChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('ngOnChanges called', changes);
+    if (changes['category'] || changes['excludeId']) {
+      this.loadSimilarProducts();
     }
   }
 
-  navigateToProduct(productId: number) {
-    console.log('Navigating to product:', productId);
-    this.router.navigate(['/product', productId]).then(() => {
-      console.log('Navigation completed');
-      window.scrollTo(0, 0);  // Scroll to top after navigation
-    }).catch(err => console.error('Navigation failed:', err));
+  ngOnDestroy() {
+    if (this.productSubscription) {
+      this.productSubscription.unsubscribe();
+    }
+  }
+
+  private subscribeToProductChanges() {
+    this.productSubscription = this.productService.getProducts().subscribe(() => {
+      this.loadSimilarProducts();
+    });
+  }
+
+  loadSimilarProducts() {
+    console.log('loadSimilarProducts called. Category:', this.category, 'Exclude ID:', this.excludeId);
+    if (this.category && this.excludeId !== undefined) {
+      this.productService.getSimilarProducts(this.category, this.excludeId).subscribe(
+        products => {
+          this.similarProducts = products.slice(0, 4);
+          console.log('Similar products loaded:', this.similarProducts);
+        },
+        error => console.error('Error loading similar products:', error)
+      );
+    } else {
+      console.log('Cannot load similar products: category or excludeId is undefined');
+    }
   }
 }
