@@ -1,11 +1,27 @@
-<div class="product-detail" *ngIf="product">
-  <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
-  <div class="product-info">
-    <h1>{{ product.name }}</h1>
-    <p class="price">{{ product.price | currency:'$MXN':'symbol':'1.0-0' }}</p>
-    <p class="description">{{ product.description }}</p>
-    <button (click)="addToCart(product)" class="add-to-cart">Add to Cart</button>
+<div class="product-detail-container" *ngIf="product">
+  <div class="product-main">
+    <div class="product-image-container">
+      <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
+    </div>
+    <div class="product-info">
+      <h1 class="product-name">{{ product.name }}</h1>
+      <p class="product-price">{{ product.price | currency:'$MXN':'symbol':'1.0-0' }}</p>
+      <p class="product-description">{{ product.description }}</p>
+      <button (click)="addToCart(product)" class="add-to-cart-button">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="similar-products-section" *ngIf="staticProducts.length > 0">
+    <h2 class="section-title">Similar Products</h2>
+    <div class="similar-products-grid">
+      <div *ngFor="let similarProduct of staticProducts" class="similar-product-card">
+        <img [src]="similarProduct.imageUrl" [alt]="similarProduct.name" class="similar-product-image">
+        <div class="similar-product-info">
+          <h3 class="similar-product-name">{{ similarProduct.name }}</h3>
+          <p class="similar-product-price">{{ similarProduct.price | currency:'$MXN':'symbol':'1.0-0' }}</p>
+        </div>
+        <a [routerLink]="['/product', similarProduct.id]" class="view-details-button">View Details</a>
+      </div>
+    </div>
   </div>
 </div>
-
-<app-similar-products [category]="product?.category" [excludeId]="product?.id"></app-similar-products>

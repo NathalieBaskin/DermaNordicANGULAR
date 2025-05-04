@@ -87,9 +87,38 @@ app.get('/api/products/:id', (req, res) => {
   });
 });
 
+// Hämta liknande produkter baserat på kategori
+app.get('/api/similar-products/:id', (req, res) => {
+  const productId = req.params.id;
+
+  // Hämta produkten för att få dess kategori
+  db.get('SELECT category FROM products WHERE id = ?', [productId], (err, product) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (!product) {
+      return res.status(404).json({ error: 'Produkt hittades inte' });
+    }
+
+    // Hämta andra produkter i samma kategori
+    db.all(
+      'SELECT * FROM products WHERE category = ? AND id != ? LIMIT 4',
+      [product.category, productId],
+      (err, rows) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+        res.json(rows);
+      }
+    );
+  });
+});
+
 app.post('/api/products', (req, res) => {
   const { name, description, price, imageUrl, hoverImageUrl, category } = req.body;
 
+  // Lägg till produkt i databasen
   db.run(
     `INSERT INTO products (name, description, price, imageUrl, hoverImageUrl, category)
      VALUES (?, ?, ?, ?, ?, ?)`,
