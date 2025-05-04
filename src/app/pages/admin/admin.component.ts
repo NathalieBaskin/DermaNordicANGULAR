@@ -40,23 +40,18 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   addProduct() {
     if (!this.newProduct.category) {
-      console.error('Category is required');
+      console.error('Kategori krävs');
       return;
     }
     this.productService.addProduct(this.newProduct).subscribe((addedProduct) => {
-      console.log('Product added:', addedProduct);
+      console.log('Produkt tillagd:', addedProduct);
       this.resetNewProduct();
-      this.productService.getProducts().subscribe(products => {
-        this.products = products;
-      });
     });
   }
+
   deleteProduct(id: number) {
     this.productService.deleteProduct(id).subscribe(() => {
-      // Uppdatera produktlistan efter att en produkt har tagits bort
-      this.productService.getProducts().subscribe(products => {
-        this.products = products;
-      });
+      console.log('Produkt borttagen');
     });
   }
 
