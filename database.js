@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./derma.db');
+const db = new sqlite3.Database('./bookings.db');
 
 // Skapa tabeller om de inte finns
 db.serialize(() => {
@@ -28,21 +28,26 @@ db.serialize(() => {
   )`);
 
   // Kontrollera om similarProducts-kolumnen finns, lägg till om den inte finns
-  db.get("PRAGMA table_info(products)", (err, rows) => {
+  db.all("PRAGMA table_info(products)", (err, rows) => {
     if (err) {
       console.error("Fel vid kontroll av tabellstruktur:", err);
       return;
     }
 
+    console.log("Tabellstruktur:", rows);
+
     // Om similarProducts-kolumnen inte finns, lägg till den
-    if (!rows.some(row => row.name === 'similarProducts')) {
+    const hasSimilarProductsColumn = rows.some(row => row.name === 'similarProducts');
+    if (!hasSimilarProductsColumn) {
       db.run("ALTER TABLE products ADD COLUMN similarProducts TEXT", (err) => {
         if (err) {
           console.error("Fel vid tillägg av similarProducts-kolumn:", err);
         } else {
-          console.log("similarProducts-kolumn tillagd");
+          console.log("similarProducts-kolumn tillagd till products-tabellen");
         }
       });
+    } else {
+      console.log("similarProducts-kolumn finns redan i products-tabellen");
     }
   });
 });
