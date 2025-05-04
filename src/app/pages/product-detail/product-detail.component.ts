@@ -40,18 +40,23 @@ export class ProductDetailComponent implements OnInit {
   }
 
   loadStaticProducts() {
-    // Hämta några statiska produkter som alltid visas som "liknande produkter"
     this.productService.getProducts().subscribe(
       products => {
-        // Ta de första 4 produkterna (eller färre om det finns färre)
-        this.staticProducts = products.slice(0, 4);
+        // Filtrera bort den aktuella produkten och ta de första 4
+        const filteredProducts = products.filter(p => p.id !== this.product?.id);
+        this.staticProducts = filteredProducts.slice(0, 4);
+        console.log('Statiska produkter laddade:', this.staticProducts);
       },
       error => console.error('Fel vid laddning av statiska produkter:', error)
     );
   }
 
   addToCart(product: Product) {
-    this.cartService.addToCart(product);
-    console.log('Produkt tillagd i kundvagn:', product);
+    if (product) {
+      this.cartService.addToCart(product);
+      console.log('Produkt tillagd i kundvagn:', product);
+      // Visa eventuellt en bekräftelse för användaren
+      alert('Produkt tillagd i kundvagnen!');
+    }
   }
 }
