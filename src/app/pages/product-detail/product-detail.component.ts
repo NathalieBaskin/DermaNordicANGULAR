@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService, Product } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
+import { Observable, switchMap, tap, map, of, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-product-detail',
@@ -12,8 +13,8 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./product-detail.component.css']
 })
 export class ProductDetailComponent implements OnInit {
-  product: Product | undefined;
-  staticProducts: Product[] = [];
+  product$!: Observable<Product | undefined>;
+  staticProducts$!: Observable<Product[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,32 +23,23 @@ export class ProductDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      const productId = +params['id'];
-      this.loadProduct(productId);
-      this.loadStaticProducts();
-    });
-  }
-
-  loadProduct(id: number) {
-    this.productService.getProductById(id).subscribe(
-      product => {
-        this.product = product;
-        console.log('Produkt laddad:', this.product);
-      },
-      error => console.error('Fel vid laddning av produkt:', error)
+    this.product$ = this.route.params.pipe(
+      map(params => +params['id']),
+      switchMap(id => this.productService.getProductById(id)),
+      tap(product => console.log('Produkt laddad:', product))
     );
-  }
 
-  loadStaticProducts() {
-    this.productService.getProducts().subscribe(
-      products => {
-        // Filtrera bort den aktuella produkten och ta de första 4
-        const filteredProducts = products.filter(p => p.id !== this.product?.id);
-        this.staticProducts = filteredProducts.slice(0, 4);
-        console.log('Statiska produkter laddade:', this.staticProducts);
-      },
-      error => console.error('Fel vid laddning av statiska produkter:', error)
+    this.staticProducts$ = combineLatest([
+      this.product$,
+      this.productService.getProducts()
+    ]).pipe(
+      map(([currentProduct, allProducts]) => {
+
+        const filteredProducts = allProducts.filter(p => p.id !== currentProduct?.id);
+        const result = filteredProducts.slice(0, 4);
+        console.log('Produkter laddade:', result);
+        return result;
+      })
     );
   }
 
@@ -55,8 +47,7 @@ export class ProductDetailComponent implements OnInit {
     if (product) {
       this.cartService.addToCart(product);
       console.log('Produkt tillagd i kundvagn:', product);
-      // Visa eventuellt en bekräftelse för användaren
-      alert('Produkt tillagd i kundvagnen!');
+      alert('Product added to cart!');
     }
   }
 }

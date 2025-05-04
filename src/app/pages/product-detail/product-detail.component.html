@@ -1,26 +1,28 @@
-<div class="product-detail-container" *ngIf="product">
-  <div class="product-main">
+<div class="product-detail-container">
+  <div class="product-main" *ngIf="product$ | async as product; else loading">
     <div class="product-image-container">
       <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
     </div>
     <div class="product-info">
       <h1 class="product-name">{{ product.name }}</h1>
-      <p class="product-price">{{ product.price | currency:'$MXN':'symbol':'1.0-0' }}</p>
+      <p class="product-price">{{ product.price | currency:'$MXN ':'symbol':'1.0-0' }}</p>
       <p class="product-description">{{ product.description }}</p>
-      <button (click)="addToCart(product)" class="add-to-cart-button">Add to Cart</button>
+      <button class="add-to-cart-button" (click)="addToCart(product)">Add to cart</button>
     </div>
   </div>
 
-  <div class="similar-products-section" *ngIf="staticProducts.length > 0">
-    <h2 class="section-title">Similar Products</h2>
+  <ng-template #loading>
+    <div class="loading">Loading products...</div>
+  </ng-template>
+
+  <div class="similar-products-section" *ngIf="staticProducts$ | async as staticProducts">
+    <h2 class="section-title" *ngIf="staticProducts.length > 0">You might also like...</h2>
     <div class="similar-products-grid">
-      <div *ngFor="let similarProduct of staticProducts"
-           class="similar-product-card"
-           [routerLink]="['/product', similarProduct.id]">
-        <img [src]="similarProduct.imageUrl" [alt]="similarProduct.name" class="similar-product-image">
+      <div *ngFor="let product of staticProducts" class="similar-product-card" [routerLink]="['/product', product.id]">
+        <img [src]="product.imageUrl" [alt]="product.name" class="similar-product-image">
         <div class="similar-product-info">
-          <h3 class="similar-product-name">{{ similarProduct.name }}</h3>
-          <p class="similar-product-price">{{ similarProduct.price | currency:'$MXN':'symbol':'1.0-0' }}</p>
+          <span class="similar-product-name">{{ product.name }}</span>
+          <span class="similar-product-price">{{ product.price | currency:'$MXN ':'symbol':'1.0-0' }}</span>
         </div>
       </div>
     </div>
