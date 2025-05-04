@@ -82,6 +82,7 @@
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
 .similar-product-card:hover {
@@ -91,12 +92,12 @@
 
 .similar-product-image {
   width: 100%;
-  height: 200px;
+  height: 350px;
   object-fit: cover;
 }
 
 .similar-product-info {
-  padding: 15px;
+  padding: 10px;
 }
 
 .similar-product-name {
@@ -108,20 +109,6 @@
 .similar-product-price {
   font-weight: bold;
   font-size: 1.1rem;
-}
-
-.view-details-button {
-  display: block;
-  text-align: center;
-  padding: 10px;
-  background-color: #f8f8f8;
-  color: #333;
-  text-decoration: none;
-  transition: background-color 0.3s;
-}
-
-.view-details-button:hover {
-  background-color: #eee;
 }
 
 @media (max-width: 768px) {

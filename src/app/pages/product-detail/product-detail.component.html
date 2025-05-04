@@ -14,13 +14,14 @@
   <div class="similar-products-section" *ngIf="staticProducts.length > 0">
     <h2 class="section-title">Similar Products</h2>
     <div class="similar-products-grid">
-      <div *ngFor="let similarProduct of staticProducts" class="similar-product-card">
+      <div *ngFor="let similarProduct of staticProducts"
+           class="similar-product-card"
+           [routerLink]="['/product', similarProduct.id]">
         <img [src]="similarProduct.imageUrl" [alt]="similarProduct.name" class="similar-product-image">
         <div class="similar-product-info">
           <h3 class="similar-product-name">{{ similarProduct.name }}</h3>
           <p class="similar-product-price">{{ similarProduct.price | currency:'$MXN':'symbol':'1.0-0' }}</p>
         </div>
-        <a [routerLink]="['/product', similarProduct.id]" class="view-details-button">View Details</a>
       </div>
     </div>
   </div>
