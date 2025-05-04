@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Product } from './product.service';
 
 export interface CartItem extends Product {
@@ -12,6 +12,7 @@ export interface CartItem extends Product {
 export class CartService {
   private cartItems: CartItem[] = [];
   private cartSubject = new BehaviorSubject<CartItem[]>([]);
+  private cartUpdateSubject = new Subject<void>();
   private lastOrder: any = null;
 
   constructor() {
@@ -22,17 +23,23 @@ export class CartService {
     const cart = localStorage.getItem('cart');
     if (cart) {
       this.cartItems = JSON.parse(cart);
-      this.cartSubject.next(this.cartItems);
+      this.cartSubject.next([...this.cartItems]);
     }
   }
 
   private saveCart(): void {
     localStorage.setItem('cart', JSON.stringify(this.cartItems));
-    this.cartSubject.next(this.cartItems);
+    // Skicka en kopia av arrayen för att säkerställa att prenumeranter får uppdateringen
+    this.cartSubject.next([...this.cartItems]);
   }
 
   getCart(): Observable<CartItem[]> {
     return this.cartSubject.asObservable();
+  }
+
+  // Metod för att lyssna på uppdateringar av varukorgen
+  getCartUpdates(): Observable<void> {
+    return this.cartUpdateSubject.asObservable();
   }
 
   addToCart(product: Product) {
@@ -43,12 +50,16 @@ export class CartService {
       this.cartItems.push({ ...product, quantity: 1 });
     }
     this.saveCart();
+    // Meddela att varukorgen har uppdaterats
+    this.cartUpdateSubject.next();
     console.log('Cart updated:', this.cartItems);
   }
 
   removeFromCart(productId: number) {
     this.cartItems = this.cartItems.filter(item => item.id !== productId);
     this.saveCart();
+    // Meddela att varukorgen har uppdaterats
+    this.cartUpdateSubject.next();
   }
 
   updateQuantity(productId: number, quantity: number) {
@@ -56,6 +67,8 @@ export class CartService {
     if (item) {
       item.quantity = quantity;
       this.saveCart();
+      // Meddela att varukorgen har uppdaterats
+      this.cartUpdateSubject.next();
     }
   }
 
@@ -82,5 +95,7 @@ export class CartService {
   clearCart() {
     this.cartItems = [];
     this.saveCart();
+    // Meddela att varukorgen har uppdaterats
+    this.cartUpdateSubject.next();
   }
 }

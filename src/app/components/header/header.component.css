@@ -72,6 +72,17 @@
   text-decoration: underline;
 }
 
+/* Styling för varukorgsräknaren */
+.cart-link {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-count {
+  font-weight: bold;
+  color: #333;
+}
+
 /* Uppdaterad media query för responsivitet */
 @media (max-width: 768px) {
   .header {

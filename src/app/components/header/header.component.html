@@ -28,7 +28,9 @@
       <a routerLink="/booking" class="nav-link">Booking</a>
       <a routerLink="/prices" class="nav-link">Prices</a>
       <a routerLink="/webshop" class="nav-link">Webshop</a>
-      <a routerLink="/cart" class="nav-link">Cart</a>
+      <a routerLink="/cart" class="nav-link cart-link" [@cartBump]="cartAnimationState">
+        Cart <span class="cart-count" *ngIf="cartItemCount > 0">({{ cartItemCount }})</span>
+      </a>
     </nav>
   </div>
 </header>
