@@ -41,7 +41,7 @@
       <select id="time" [(ngModel)]="selectedTime" name="time">
         <option value="">Select a time</option>
         <option *ngFor="let timeSlot of availableTimes" [value]="timeSlot.time" [disabled]="timeSlot.isBooked">
-          {{ timeSlot.time }}
+          {{ timeSlot.time }} {{ timeSlot.isBooked ? '(Booked)' : '' }}
         </option>
       </select>
     </div>
@@ -57,10 +57,15 @@
       <label for="email">Email:</label>
       <input type="email" id="email" [(ngModel)]="email" name="email">
     </div>
+
+    <div *ngIf="bookingError" class="booking-error">
+      {{ bookingError }}
+    </div>
+
     <button type="submit" [disabled]="!isFormValid()">Book now</button>
   </form>
 
   <div *ngIf="showBookingConfirmation" class="booking-confirmation">
-    <p>Booking confirmed! Thank you for scheduling a consultation.</p>
+    <p>Booking confirmed! Thank you for scheduling a {{ isConsultation ? 'consultation' : 'treatment' }}.</p>
   </div>
 </div>

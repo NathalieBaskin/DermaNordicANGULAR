@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class PlasmapenComponent implements OnInit {
   constructor(private router: Router) {}
-  treatmentName: string = 'Plasmapen';
+  treatmentName: string = 'Plasma Pen';
   treatmentImage: string = '/assets/images/plasmapen.jpg';
   treatmentDescription: string = 'Plasma Pen is a non-surgical skin tightening treatment that uses plasma energy to create micro-injuries, triggering collagen and elastin production for a firmer, youthful appearance.';
   treatmentBenefits: string[] = [

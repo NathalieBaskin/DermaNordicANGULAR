@@ -36,7 +36,9 @@ app.get('/api/available-times', (req, res) => {
     }
     const bookedTimes = rows.map(row => row.time);
     const availableTimes = allTimes.filter(time => !bookedTimes.includes(time));
-    res.json(availableTimes);
+    console.log('Available times:', availableTimes);
+    console.log('Booked times:', bookedTimes);
+    res.json({ available: availableTimes, booked: bookedTimes });
   });
 });
 

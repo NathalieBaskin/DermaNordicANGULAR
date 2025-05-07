@@ -7,13 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BookingService } from '../../services/booking.service';
+import { BookingService, TimeSlot } from '../../services/booking.service';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
-
-interface TimeSlot {
-  time: string;
-  isBooked: boolean;
-}
 
 @Component({
   selector: 'app-booking',
@@ -46,6 +41,7 @@ export class BookingComponent implements OnInit {
   showBookedMessage: boolean = false;
   calendarReady: boolean = false;
   isConsultation: boolean = false;
+  bookingError: string = '';
   consultationTimes: string[] = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00'];
   consultationInfo: string = `A consultation is an important first step before any treatment. It allows us to assess your skin,
     discuss your concerns and goals, and recommend the most suitable treatments for you.
@@ -146,16 +142,30 @@ export class BookingComponent implements OnInit {
 
   getAvailableTimes() {
     if (this.selectedDate && this.selectedTherapist) {
-      const dateString = this.selectedDate.toISOString().split('T')[0];
-      this.bookingService.getAvailableTimes(new Date(dateString), this.selectedTherapist).subscribe(
-        times => {
-          this.availableTimes = times.map(time => ({ time, isBooked: false }));
-        },
-        error => {
-          console.error('Error fetching available times:', error);
-          this.availableTimes = [];
-        }
-      );
+      if (this.isConsultation) {
+        // För konsultationer, använd fördefinierade tider
+        this.availableTimes = this.consultationTimes.map(time => ({
+          time,
+          isBooked: false
+        }));
+      } else {
+        // För behandlingar, hämta tillgängliga tider från API
+        this.bookingService.getAvailableTimes(this.selectedDate, this.selectedTherapist).subscribe(
+          timeSlots => {
+            console.log('Received time slots:', timeSlots);
+            this.availableTimes = timeSlots.filter(slot => !slot.isBooked);
+          },
+          error => {
+            console.error('Error fetching available times:', error);
+            // Fallback till standardtider om API-anropet misslyckas
+            const defaultTimes = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00'];
+            this.availableTimes = defaultTimes.map(time => ({
+              time,
+              isBooked: false
+            }));
+          }
+        );
+      }
     }
   }
 
@@ -175,10 +185,12 @@ export class BookingComponent implements OnInit {
   }
 
   onSubmit() {
+    this.bookingError = '';
+
     const bookingData = {
       treatmentName: this.treatmentName,
       treatmentPrice: this.treatmentPrice,
-      date: this.selectedDate,
+      date: this.selectedDateString,
       time: this.selectedTime,
       therapist: this.selectedTherapist,
       firstName: this.firstName,
@@ -198,6 +210,13 @@ export class BookingComponent implements OnInit {
         },
         error => {
           console.error('Error booking consultation:', error);
+          if (error.status === 409) {
+            this.bookingError = 'This time slot is already booked. Please select another time.';
+            // Uppdatera tillgängliga tider för att reflektera den nya bokningen
+            this.getAvailableTimes();
+          } else {
+            this.bookingError = 'An error occurred while booking. Please try again.';
+          }
         }
       );
     } else {
