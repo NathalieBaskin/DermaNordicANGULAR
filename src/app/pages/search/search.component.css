@@ -1,6 +1,7 @@
 .search-results-header {
   margin-bottom: 20px;
   text-align: center;
+  font-size: 25px;
 }
 
 .treatments {
@@ -8,6 +9,8 @@
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
+  font-size: 15px;
+  text-align: center;
 }
 
 .treatment-card {
@@ -17,6 +20,7 @@
   text-decoration: none;
   color: inherit;
   transition: box-shadow 0.3s ease;
+  font-size: 20px;
 }
 
 .treatment-card:hover {
@@ -27,6 +31,7 @@ h3 {
   margin-top: 30px;
   margin-bottom: 15px;
   text-align: center;
+  font-size: 25px;
 }
 
 .products {
@@ -50,7 +55,7 @@ h3 {
 
 .product-image {
   width: 100%;
-  height: 200px;
+  height: 350px;
   object-fit: cover;
   border-radius: 4px;
 }
