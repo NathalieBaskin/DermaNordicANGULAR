@@ -45,11 +45,20 @@ app.get('/api/available-times', (req, res) => {
 app.get('/api/fully-booked-dates', (req, res) => {
   console.log('Received request for fully booked dates');
 
-  // Ändra SQL-frågan för att hitta datum där alla tider är bokade
-  // Anta att det finns 6 tillgängliga tider per dag
-  db.all(`SELECT DISTINCT date FROM bookings
-          GROUP BY date
-          HAVING COUNT(DISTINCT time) >= 6`, (err, rows) => {
+  // Anta att det finns 7 tillgängliga tider per terapeut per dag
+  db.all(`
+    SELECT date
+    FROM bookings
+    WHERE therapist = 'Sebastian'
+    GROUP BY date
+    HAVING COUNT(DISTINCT time) = 7
+    INTERSECT
+    SELECT date
+    FROM bookings
+    WHERE therapist = 'Jhoselin'
+    GROUP BY date
+    HAVING COUNT(DISTINCT time) = 7
+  `, (err, rows) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: err.message });
@@ -65,7 +74,6 @@ app.get('/api/fully-booked-dates', (req, res) => {
     res.json(dates);
   });
 });
-
 // API-endpoints för produkter
 app.get('/api/products', (req, res) => {
   db.all('SELECT * FROM products', (err, rows) => {
